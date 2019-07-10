@@ -3,6 +3,114 @@
   
     
     <entry>
+      <title><![CDATA[一把梭了OSCP后的思考]]></title>
+      <url>/2019/07/10/%E4%B8%80%E6%8A%8A%E6%A2%AD%E4%BA%86OSCP%E5%90%8E%E7%9A%84%E6%80%9D%E8%80%83/</url>
+      <content type="html"><![CDATA[<blockquote>
+<p>Author：B1ngDa0</p>
+</blockquote>
+<p>本文是记录在一次通过OSCP后对考试的一些思考包括我是怎么考的、建议、必须注意的坑点、和吐槽点，关于OSCP介绍的文章有很多，就不再赘述什么是OSCP了。</p>
+<hr>
+<h2 id="个人历程"><a href="#个人历程" class="headerlink" title="个人历程"></a>个人历程</h2><h3 id="时间线"><a href="#时间线" class="headerlink" title="时间线"></a>时间线</h3><ul>
+<li>4月末：报名</li>
+<li>5月中旬：实验室开启，约考</li>
+<li>6月末：参加考试，并一次获得证书</li>
+</ul>
+<p>在实验室开启后，过了一遍官方教材之后，<del>打下几台lab就没有继续练习，也没有在其他平台练习</del>，不建议像我这样做，请勿参考。</p>
+<p>6月23日早上7点正式考试，调整了作息6点左右醒来，等到6点45使用官方的屏幕显示以及摄像头连接，无误后，7点整会收到考试的信息，OENPVPN的连接文件、目标机器、控制面板等</p>
+<p>考试过程中，可随时与监考人员提出需要休息、吃饭等，比较自由，监考人员只有屏幕以及摄像头的信息，不会监控声音或其他。</p>
+<p>一边记录一边做题到晚上的时候就已经拿到了25+20+10+10+10 75分了 已经过了<br>有两道题是没提到最高权限，由于官方没有明确指出local.txt以及user权限的分数，所以一直奋战到凌晨4点，想提下一台，更为稳妥。结果并没有成功，最后分数停格在75。</p>
+<p>在考试结束后的24小时是上传报告的时间</p>
+<ul>
+<li>Your exam is in PDF format</li>
+<li>Your PDF has been archived into a password-protected .7z file</li>
+<li>You used your OSID as part of the name of your .7z file</li>
+<li>You have uploaded your .7z file to <a href="https://upload.offsec.com" target="_blank" rel="noopener">https://upload.offsec.com</a></li>
+<li>You have emailed the link from the upload page to “oscp AT offensive-security DOT com”</li>
+</ul>
+<p>比起实打实的拿flag实战环节，写报告环节是很多人的丢分点所在，可能你拿下所有的权限以及flag但是由于报告，可能还是会获得0分。将在建议以及坑点详细讲述。</p>
+<hr>
+<h3 id="建议一-可选任务"><a href="#建议一-可选任务" class="headerlink" title="建议一 可选任务"></a>建议一 可选任务</h3><p>offsec会告诉你提交教材PDF每章节的练习报告，以及十台或十台以上的lab机器练习报告，可以获得考试分5分，建议大家完成这个可选任务，对通过考试会更为稳妥，考试是很容易出现65分差5分才能过的情况。</p>
+<hr>
+<h3 id="建议二-思维转换"><a href="#建议二-思维转换" class="headerlink" title="建议二 思维转换"></a>建议二 思维转换</h3><p>我在报考之后没有进行太多的练习，是因为在年初的时候就经常打hackthebox，对靶机使用的套路已经较为熟悉，就只等着兵来将挡水来土掩。</p>
+<p>大家在练习的时候，不是为了多刷题遇到原题，而是一个思维的转换，知道它会怎么出题，比如看了端口信息、网站内容后知道漏洞会出在哪里。</p>
+<p>有朋友在练习的时候使用实战渗透的思路去做题，反而碰到了兔子洞，如果是在考试的时候遇到兔子洞并且陷进去，是很浪费时间以及影响心态的。</p>
+<hr>
+<h3 id="建议三-时间安排"><a href="#建议三-时间安排" class="headerlink" title="建议三 时间安排"></a>建议三 时间安排</h3><p>建议约考的时间是一天的开始，充足的休息睡眠后能有足够的精力去更好的做题，比如我早上7点的考试，大不了我就是坚持一天一夜的去做题，如果是晚上或者下午晚点开始的话，做到后面会很容易疲倦。</p>
+<h3 id="建议三-详细记录"><a href="#建议三-详细记录" class="headerlink" title="建议三 详细记录"></a>建议三 详细记录</h3><p>官方是明确指出需要以下证明：</p>
+<ul>
+<li><p>Exploit 代码</p>
+<ol>
+<li>修改后的代码</li>
+<li>代码来源地址</li>
+<li>生成shellcode的命令</li>
+<li>高亮修改过的代码</li>
+<li>解释为什么做出这些改变</li>
+</ol>
+</li>
+<li><p>成功证明<br>成功的证明就是拿去权限，读取flag文件，根据每个机子的题型不同，会存在user权限和local.txt文件，最高权限：<br>SYSTEM user<br>Administrator user<br>User with Administrator privilege<br>Root</p>
+</li>
+<li><p>面板提交flag<br><img src="/images/cache/2019070111361c0TIOVy4R.png" alt="image"><br>需要在面板中提交读取到的flag，面板只接收不判断对错，所以复制的时候注意是否缺少。</p>
+</li>
+<li><p>截屏<br>截屏不仅是需要最终读取flag的界面，可以详细的记录每一步的操作与命令反馈<br><img src="/images/cache/201907011136PnMuiOocTr.png" alt="image"></p>
+<p>  提供以下两个命令方便最终截图：<br>  linux结果答案截图：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hostname &amp;&amp; whoami &amp;&amp; cat proof.txt &amp;&amp; /sbin/ifconfig</span><br></pre></td></tr></table></figure>
+
+<p>  windows结果答案截图：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hostname &amp;&amp; whoami.exe &amp;&amp; type proof.txt &amp;&amp; ipconfig /all</span><br></pre></td></tr></table></figure>
+
+<p>请在考试的时候将每一步详细截图，并简单的写下备注，方便考完试后详细书写报告。</p>
+</li>
+</ul>
+<hr>
+<h3 id="建议四-多理解官方考试指南"><a href="#建议四-多理解官方考试指南" class="headerlink" title="建议四 多理解官方考试指南"></a>建议四 多理解官方考试指南</h3><p><a href="https://support.offensive-security.com/oscp-exam-guide/" target="_blank" rel="noopener">https://support.offensive-security.com/oscp-exam-guide/</a></p>
+<hr>
+<h2 id="坑点"><a href="#坑点" class="headerlink" title="坑点"></a>坑点</h2><p>在此很感谢OSCP微信群的先驱们，他们在考试之前给予我很多帮助，将很多很重要的坑点告诉了我，使得我没有踩到太多的坑以至于被扣分。</p>
+<h3 id="坑点一-不要使用以下软件版本"><a href="#坑点一-不要使用以下软件版本" class="headerlink" title="坑点一 不要使用以下软件版本"></a>坑点一 不要使用以下软件版本</h3><blockquote>
+<p>Spoofing (IP, ARP, DNS, NBNS, etc)<br>Commercial tools or services (Metasploit Pro, Burp Pro, etc.)<br>Automatic exploitation tools (e.g. db_autopwn, browser_autopwn, SQLmap, SQLninja etc.)<br>Mass vulnerability scanners (e.g. Nessus, NeXpose, OpenVAS, Canvas, Core Impact, SAINT, etc.)<br>Features in other tools that utilize either forbidden or restricted exam limitations</p>
+</blockquote>
+<h3 id="坑点二-注意msf的攻击限制"><a href="#坑点二-注意msf的攻击限制" class="headerlink" title="坑点二 注意msf的攻击限制"></a>坑点二 注意msf的攻击限制</h3><p>对于您选择的单个目标机器，您只能使用metasploit模块（辅助、利用和发布）或meterpreter有效负载。一旦选择了一台目标机器，就不能对任何其他机器使用元sploit模块（辅助、利用或发布）或meterpreter有效负载。</p>
+<p>以下可随意对所有机器使用：</p>
+<blockquote>
+<p>multi handler (aka exploit/multi/handler)<br>msfvenom<br>pattern_create.rb<br>pattern_offset.rb</p>
+</blockquote>
+<h3 id="坑点三-只能在一台机器上使用一次meterpreter"><a href="#坑点三-只能在一台机器上使用一次meterpreter" class="headerlink" title="坑点三 只能在一台机器上使用一次meterpreter"></a>坑点三 只能在一台机器上使用一次meterpreter</h3><p>可能很多人使用msfvenom后习惯用 meterpreter，请多使用nc获得反弹shell。</p>
+<h3 id="坑点四-一定要交互式shell-不要webshell"><a href="#坑点四-一定要交互式shell-不要webshell" class="headerlink" title="坑点四 一定要交互式shell 不要webshell"></a>坑点四 一定要交互式shell 不要webshell</h3><blockquote>
+<p>You must provide the contents of the proof files in an interactive shell on the target machine with the type or cat command from their original location. Obtaining the contents of the proof files in any other way will result in zero points for the target machine; this includes any type of web-based shell.</p>
+</blockquote>
+<p>官方明确指出以如何形式的webshell读取flag都将以零分处理，虽然蚁剑等webshell管理软件，内含交互式shell，但是比较含糊，建议大家进行再次反弹。</p>
+<p>有出现获得满分、所有flag但是使用的webshell而没有通过考试的情况，在获取webshell之后可以多走一步，上传反弹shell脚本或上传nc获得反弹交互式shell，offsec不认webshell。</p>
+<h3 id="坑点五-获取最高权限后登陆ssh或3389远程桌面"><a href="#坑点五-获取最高权限后登陆ssh或3389远程桌面" class="headerlink" title="坑点五 获取最高权限后登陆ssh或3389远程桌面"></a>坑点五 获取最高权限后登陆ssh或3389远程桌面</h3><p>在获取最高权限之后，可添加管理员权限的账户进行登陆ssh或3389远程桌面，再截图一次flag、ip等。</p>
+<h3 id="坑点六-Try-Harder"><a href="#坑点六-Try-Harder" class="headerlink" title="坑点六 Try Harder!"></a>坑点六 Try Harder!</h3><p>24小时与五台机器对抗，真的很刺激，也许会因为兔子洞、没思路抠破脑壳，情绪低落，得分缓慢，但是请调整心态，勇猛屠龙！Try Hader！</p>
+<h2 id="槽点"><a href="#槽点" class="headerlink" title="槽点"></a>槽点</h2><p>其实吐槽点并没有太多，OSCP是我考过最惬意的考试，实战是比做选择题来的更刺激。<br>但是始终是个考试，不一定会得满分，在丢分之后，很想知道Why。</p>
+<ul>
+<li>获得考试报告之后，不管成功与否不能再去测试其他思路</li>
+<li>官方不会告诉你为什么没有通过<br>希望后面官方会逐渐解决，给一次、二次、多次没过的同学更多的希望。</li>
+</ul>
+<hr>
+<p>以上就是本人一把梭了OSCP的一点思考，并不是什么深知灼见，只是总结了一点前辈们的告诫、经验，希望备考或者待考的同学能够更好的面对考试，避开坑点。</p>
+<h2 id="关于交流"><a href="#关于交流" class="headerlink" title="关于交流"></a>关于交流</h2><p>我们有一个国内最大的oscp的wechat聊天组群，有心的小伙伴可以给我发邮件我拉你进群，群里都是乐于帮助的小伙伴，但是我们杜绝直接剧透交流lab题目，拒绝交流考试题目，只为了共同学习共同进步。B1ngDa0#08sec.org</p>
+<p>Try Hader!</p>
+<figure class="image-box">
+                <img src="/images/cache/201907011221Bopf25D8hb.png" alt="微信图片_20190701121927.png" title class>
+                <p>微信图片_20190701121927.png</p>
+            </figure>]]></content>
+      
+        <categories>
+            
+            <category> 证书 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> OSCP </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[HTB靶机渗透实战Writeup_Carrier]]></title>
       <url>/2019/07/09/HTB%E9%9D%B6%E6%9C%BA%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98Writeup-Carrier/</url>
       <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>大家好,我是成都B1ngDa0，今天给大家带来HTB(hackthebox)的一个靶机：Carrier的writeup，作为一篇自己回顾整理知识点以及分享给大家的文章，还望斧正。  </p>

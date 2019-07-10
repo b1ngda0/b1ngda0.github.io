@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    
+    
+    <title>一把梭了OSCP后的思考 | 放荡不羁混世间 | B1ngDa0在这儿舞剑</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="keywords" content="OSCP">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.css">
+    <link rel="stylesheet" href="/css/style.css?v=1.4.2">
+    
+    <script type="text/javascript">
+        // Data Center
+        var DC = {
+            reward:	true,
+            lv: JSON.parse('{"enable":true,"app_id":"5qFlGhUV7fo3sxC2cSHAeMwU-gzGzoHsz","app_key":"pIKFHOkquTOmXNwhTKx9vBnu","icon":true}'),
+            v: JSON.parse('{"enable":true,"appid":"5qFlGhUV7fo3sxC2cSHAeMwU-gzGzoHsz","appkey":"pIKFHOkquTOmXNwhTKx9vBnu","notify":true,"verify":true,"placeholder":"give me some sugers plz...","avatar":"wavatar"}'),
+            g: JSON.parse('{"enable":false,"lazy":true,"owner":"codefine","repo":"gitment","oauth":{"client_id":null,"client_secret":null},"perPage":10}'),
+            d: JSON.parse('{"app_id":null}')
+        };
+    </script>
+    <script type="text/javascript">
+        window.lazyScripts=[];
+    </script>
+    
+</head>
+
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide">
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap">
+      
+      <img src="/img/brand.jpg" class="brand-bg">
+      
+      <div class="brand">
+        <a href="/about" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">B1ngDa0</h5>
+          <a href="mailto:B1ngDa0@08sec.org" title="B1ngDa0@08sec.org" class="mail">
+            
+              <span>B</span>
+            
+              <span>1</span>
+            
+              <span>n</span>
+            
+              <span>g</span>
+            
+              <span>D</span>
+            
+              <span>a</span>
+            
+              <span>0</span>
+            
+              <span>@</span>
+            
+              <span>0</span>
+            
+              <span>8</span>
+            
+              <span>s</span>
+            
+              <span>e</span>
+            
+              <span>c</span>
+            
+              <span>.</span>
+            
+              <span>o</span>
+            
+              <span>r</span>
+            
+              <span>g</span>
+            
+          </a>
+        </hgroup>
+        
+        <ul class="menu-link">
+          
+              <li>
+                <a href="https://github.com/b1ngda0" target="_blank">
+                  <i class="icon icon-lg icon-github"></i>
+                </a>
+              </li>
+            
+        </ul>
+        
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                HOME
+              </a>
+            </li>
+        
+            <li class="">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                CATEGORIES
+              </a>
+            </li>
+        
+            <li class="">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                TAGS
+              </a>
+            </li>
+        
+            <li class="">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                ARCHIVES
+              </a>
+            </li>
+        
+            <li class="">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-user"></i>
+                ABOUT
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row clearfix">
+        <a href="javascript:;" class="header-icon pull-left waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">
+            <span>一把梭了OSCP后的思考</span>
+            
+        </div>
+        
+        <a href="javascript:;" id="site_search_btn" class="header-icon pull-right waves-effect waves-circle waves-light">
+            <i class="icon icon-lg icon-search"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+    <img src="/img/banner.jpg" class="header-bg">
+    <div class="container fade-scale">
+        <h1 class="title">一把梭了OSCP后的思考</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2019-07-10T01:22:07.000Z" itemprop="datePublished" class="page-time">
+  2019-07-10
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/证书/">证书</a></li></ul>
+
+            
+        </h5>
+        
+    </div>
+    
+
+</header>
+
+<div id="site_search">
+    <div class="search-title clearfix">
+        <span class="pull-left">
+          <i class="icon icon-lg icon-search"></i>
+        </span>
+        <input type="text" id="local-search-input" name="q" results="0" placeholder="search my blog..." class="form-control pull-left"/>
+        <a href="javascript:;" class="close pull-right waves-effect waves-circle waves-light">
+          <i class="icon icon-lg icon-close"></i>
+        </a>
+    </div>
+    <div id="local-search-result"></div>
+</div>
+
+
+<div class="container body-wrap">
+    <article id="post-一把梭了OSCP后的思考"
+  class="post-article article-type-post" itemprop="blogPost">
+    <div class="post-card">
+        <h1 class="post-card-title">一把梭了OSCP后的思考</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-07-10 09:22:07" datetime="2019-07-10T01:22:07.000Z"  itemprop="datePublished">2019-07-10</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/证书/">证书</a></li></ul>
+
+
+
+            
+	<span id="/2019/07/10/一把梭了OSCP后的思考/" class="leancloud_visitors" data-flag-title="一把梭了OSCP后的思考" title="一把梭了OSCP后的思考">
+		
+			<i class="icon icon-eye"></i>
+		
+		<span class="leancloud-visitors-count"></span>
+	</span>
+ 
+
+            
+    <span class="leancloud-comment">
+        <i class="icon icon-comment-o"></i>
+        <a href="/2019/07/10/一把梭了OSCP后的思考/#comment">
+            <span class="valine-comment-count" data-xid="/2019/07/10/一把梭了OSCP后的思考/"></span>
+        </a>
+    </span>
+
+
+
+            
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            
+            <blockquote>
+<p>Author：B1ngDa0</p>
+</blockquote>
+<p>本文是记录在一次通过OSCP后对考试的一些思考包括我是怎么考的、建议、必须注意的坑点、和吐槽点，关于OSCP介绍的文章有很多，就不再赘述什么是OSCP了。</p>
+<hr>
+<h2 id="个人历程"><a href="#个人历程" class="headerlink" title="个人历程"></a>个人历程</h2><h3 id="时间线"><a href="#时间线" class="headerlink" title="时间线"></a>时间线</h3><ul>
+<li>4月末：报名</li>
+<li>5月中旬：实验室开启，约考</li>
+<li>6月末：参加考试，并一次获得证书</li>
+</ul>
+<p>在实验室开启后，过了一遍官方教材之后，<del>打下几台lab就没有继续练习，也没有在其他平台练习</del>，不建议像我这样做，请勿参考。</p>
+<p>6月23日早上7点正式考试，调整了作息6点左右醒来，等到6点45使用官方的屏幕显示以及摄像头连接，无误后，7点整会收到考试的信息，OENPVPN的连接文件、目标机器、控制面板等</p>
+<p>考试过程中，可随时与监考人员提出需要休息、吃饭等，比较自由，监考人员只有屏幕以及摄像头的信息，不会监控声音或其他。</p>
+<p>一边记录一边做题到晚上的时候就已经拿到了25+20+10+10+10 75分了 已经过了<br>有两道题是没提到最高权限，由于官方没有明确指出local.txt以及user权限的分数，所以一直奋战到凌晨4点，想提下一台，更为稳妥。结果并没有成功，最后分数停格在75。</p>
+<p>在考试结束后的24小时是上传报告的时间</p>
+<ul>
+<li>Your exam is in PDF format</li>
+<li>Your PDF has been archived into a password-protected .7z file</li>
+<li>You used your OSID as part of the name of your .7z file</li>
+<li>You have uploaded your .7z file to <a href="https://upload.offsec.com" target="_blank" rel="noopener">https://upload.offsec.com</a></li>
+<li>You have emailed the link from the upload page to “oscp AT offensive-security DOT com”</li>
+</ul>
+<p>比起实打实的拿flag实战环节，写报告环节是很多人的丢分点所在，可能你拿下所有的权限以及flag但是由于报告，可能还是会获得0分。将在建议以及坑点详细讲述。</p>
+<hr>
+<h3 id="建议一-可选任务"><a href="#建议一-可选任务" class="headerlink" title="建议一 可选任务"></a>建议一 可选任务</h3><p>offsec会告诉你提交教材PDF每章节的练习报告，以及十台或十台以上的lab机器练习报告，可以获得考试分5分，建议大家完成这个可选任务，对通过考试会更为稳妥，考试是很容易出现65分差5分才能过的情况。</p>
+<hr>
+<h3 id="建议二-思维转换"><a href="#建议二-思维转换" class="headerlink" title="建议二 思维转换"></a>建议二 思维转换</h3><p>我在报考之后没有进行太多的练习，是因为在年初的时候就经常打hackthebox，对靶机使用的套路已经较为熟悉，就只等着兵来将挡水来土掩。</p>
+<p>大家在练习的时候，不是为了多刷题遇到原题，而是一个思维的转换，知道它会怎么出题，比如看了端口信息、网站内容后知道漏洞会出在哪里。</p>
+<p>有朋友在练习的时候使用实战渗透的思路去做题，反而碰到了兔子洞，如果是在考试的时候遇到兔子洞并且陷进去，是很浪费时间以及影响心态的。</p>
+<hr>
+<h3 id="建议三-时间安排"><a href="#建议三-时间安排" class="headerlink" title="建议三 时间安排"></a>建议三 时间安排</h3><p>建议约考的时间是一天的开始，充足的休息睡眠后能有足够的精力去更好的做题，比如我早上7点的考试，大不了我就是坚持一天一夜的去做题，如果是晚上或者下午晚点开始的话，做到后面会很容易疲倦。</p>
+<h3 id="建议三-详细记录"><a href="#建议三-详细记录" class="headerlink" title="建议三 详细记录"></a>建议三 详细记录</h3><p>官方是明确指出需要以下证明：</p>
+<ul>
+<li><p>Exploit 代码</p>
+<ol>
+<li>修改后的代码</li>
+<li>代码来源地址</li>
+<li>生成shellcode的命令</li>
+<li>高亮修改过的代码</li>
+<li>解释为什么做出这些改变</li>
+</ol>
+</li>
+<li><p>成功证明<br>成功的证明就是拿去权限，读取flag文件，根据每个机子的题型不同，会存在user权限和local.txt文件，最高权限：<br>SYSTEM user<br>Administrator user<br>User with Administrator privilege<br>Root</p>
+</li>
+<li><p>面板提交flag<br><a rel=一把梭了OSCP后的思考 href="/images/cache/2019070111361c0TIOVy4R.png" title="image" data-fancybox="images"><img src="/images/cache/2019070111361c0TIOVy4R.png" alt="image"></a><br>需要在面板中提交读取到的flag，面板只接收不判断对错，所以复制的时候注意是否缺少。</p>
+</li>
+<li><p>截屏<br>截屏不仅是需要最终读取flag的界面，可以详细的记录每一步的操作与命令反馈<br><a rel=一把梭了OSCP后的思考 href="/images/cache/201907011136PnMuiOocTr.png" title="image" data-fancybox="images"><img src="/images/cache/201907011136PnMuiOocTr.png" alt="image"></a></p>
+<p>  提供以下两个命令方便最终截图：<br>  linux结果答案截图：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hostname &amp;&amp; whoami &amp;&amp; cat proof.txt &amp;&amp; /sbin/ifconfig</span><br></pre></td></tr></table></figure>
+
+<p>  windows结果答案截图：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hostname &amp;&amp; whoami.exe &amp;&amp; type proof.txt &amp;&amp; ipconfig /all</span><br></pre></td></tr></table></figure>
+
+<p>请在考试的时候将每一步详细截图，并简单的写下备注，方便考完试后详细书写报告。</p>
+</li>
+</ul>
+<hr>
+<h3 id="建议四-多理解官方考试指南"><a href="#建议四-多理解官方考试指南" class="headerlink" title="建议四 多理解官方考试指南"></a>建议四 多理解官方考试指南</h3><p><a href="https://support.offensive-security.com/oscp-exam-guide/" target="_blank" rel="noopener">https://support.offensive-security.com/oscp-exam-guide/</a></p>
+<hr>
+<h2 id="坑点"><a href="#坑点" class="headerlink" title="坑点"></a>坑点</h2><p>在此很感谢OSCP微信群的先驱们，他们在考试之前给予我很多帮助，将很多很重要的坑点告诉了我，使得我没有踩到太多的坑以至于被扣分。</p>
+<h3 id="坑点一-不要使用以下软件版本"><a href="#坑点一-不要使用以下软件版本" class="headerlink" title="坑点一 不要使用以下软件版本"></a>坑点一 不要使用以下软件版本</h3><blockquote>
+<p>Spoofing (IP, ARP, DNS, NBNS, etc)<br>Commercial tools or services (Metasploit Pro, Burp Pro, etc.)<br>Automatic exploitation tools (e.g. db_autopwn, browser_autopwn, SQLmap, SQLninja etc.)<br>Mass vulnerability scanners (e.g. Nessus, NeXpose, OpenVAS, Canvas, Core Impact, SAINT, etc.)<br>Features in other tools that utilize either forbidden or restricted exam limitations</p>
+</blockquote>
+<h3 id="坑点二-注意msf的攻击限制"><a href="#坑点二-注意msf的攻击限制" class="headerlink" title="坑点二 注意msf的攻击限制"></a>坑点二 注意msf的攻击限制</h3><p>对于您选择的单个目标机器，您只能使用metasploit模块（辅助、利用和发布）或meterpreter有效负载。一旦选择了一台目标机器，就不能对任何其他机器使用元sploit模块（辅助、利用或发布）或meterpreter有效负载。</p>
+<p>以下可随意对所有机器使用：</p>
+<blockquote>
+<p>multi handler (aka exploit/multi/handler)<br>msfvenom<br>pattern_create.rb<br>pattern_offset.rb</p>
+</blockquote>
+<h3 id="坑点三-只能在一台机器上使用一次meterpreter"><a href="#坑点三-只能在一台机器上使用一次meterpreter" class="headerlink" title="坑点三 只能在一台机器上使用一次meterpreter"></a>坑点三 只能在一台机器上使用一次meterpreter</h3><p>可能很多人使用msfvenom后习惯用 meterpreter，请多使用nc获得反弹shell。</p>
+<h3 id="坑点四-一定要交互式shell-不要webshell"><a href="#坑点四-一定要交互式shell-不要webshell" class="headerlink" title="坑点四 一定要交互式shell 不要webshell"></a>坑点四 一定要交互式shell 不要webshell</h3><blockquote>
+<p>You must provide the contents of the proof files in an interactive shell on the target machine with the type or cat command from their original location. Obtaining the contents of the proof files in any other way will result in zero points for the target machine; this includes any type of web-based shell.</p>
+</blockquote>
+<p>官方明确指出以如何形式的webshell读取flag都将以零分处理，虽然蚁剑等webshell管理软件，内含交互式shell，但是比较含糊，建议大家进行再次反弹。</p>
+<p>有出现获得满分、所有flag但是使用的webshell而没有通过考试的情况，在获取webshell之后可以多走一步，上传反弹shell脚本或上传nc获得反弹交互式shell，offsec不认webshell。</p>
+<h3 id="坑点五-获取最高权限后登陆ssh或3389远程桌面"><a href="#坑点五-获取最高权限后登陆ssh或3389远程桌面" class="headerlink" title="坑点五 获取最高权限后登陆ssh或3389远程桌面"></a>坑点五 获取最高权限后登陆ssh或3389远程桌面</h3><p>在获取最高权限之后，可添加管理员权限的账户进行登陆ssh或3389远程桌面，再截图一次flag、ip等。</p>
+<h3 id="坑点六-Try-Harder"><a href="#坑点六-Try-Harder" class="headerlink" title="坑点六 Try Harder!"></a>坑点六 Try Harder!</h3><p>24小时与五台机器对抗，真的很刺激，也许会因为兔子洞、没思路抠破脑壳，情绪低落，得分缓慢，但是请调整心态，勇猛屠龙！Try Hader！</p>
+<h2 id="槽点"><a href="#槽点" class="headerlink" title="槽点"></a>槽点</h2><p>其实吐槽点并没有太多，OSCP是我考过最惬意的考试，实战是比做选择题来的更刺激。<br>但是始终是个考试，不一定会得满分，在丢分之后，很想知道Why。</p>
+<ul>
+<li>获得考试报告之后，不管成功与否不能再去测试其他思路</li>
+<li>官方不会告诉你为什么没有通过<br>希望后面官方会逐渐解决，给一次、二次、多次没过的同学更多的希望。</li>
+</ul>
+<hr>
+<p>以上就是本人一把梭了OSCP的一点思考，并不是什么深知灼见，只是总结了一点前辈们的告诫、经验，希望备考或者待考的同学能够更好的面对考试，避开坑点。</p>
+<h2 id="关于交流"><a href="#关于交流" class="headerlink" title="关于交流"></a>关于交流</h2><p>我们有一个国内最大的oscp的wechat聊天组群，有心的小伙伴可以给我发邮件我拉你进群，群里都是乐于帮助的小伙伴，但是我们杜绝直接剧透交流lab题目，拒绝交流考试题目，只为了共同学习共同进步。B1ngDa0#08sec.org</p>
+<p>Try Hader!</p>
+<figure class="image-box">
+                <a rel=一把梭了OSCP后的思考 href="/images/cache/201907011221Bopf25D8hb.png" title="微信图片_20190701121927.png" data-fancybox="images"><img src="/images/cache/201907011221Bopf25D8hb.png" alt="微信图片_20190701121927.png" title class></a>
+                <p>微信图片_20190701121927.png</p>
+            </figure>
+        </div>
+        
+<blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2019-07-10T01:23:07.764Z" itemprop="dateUpdated">2019-07-10 09:23:07</time>
+</span><br>
+
+
+        
+        转载注明出处，原文地址：<a href="/2019/07/10/一把梭了OSCP后的思考/" target="_blank" rel="external">https://www.b1ngda0.cn/2019/07/10/一把梭了OSCP后的思考/</a>
+        
+    </div>
+    <footer>
+        <a href="https://www.b1ngda0.cn">
+            <img src="/img/avatar.jpg" alt="B1ngDa0">
+            B1ngDa0
+        </a>
+    </footer>
+</blockquote>
+
+        
+            <div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+            
+        
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OSCP/">OSCP</a></li></ul>
+
+            <div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://www.b1ngda0.cn/2019/07/10/一把梭了OSCP后的思考/&title=《一把梭了OSCP后的思考》 — 放荡不羁混世间&pic=https://www.b1ngda0.cn/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://www.b1ngda0.cn/2019/07/10/一把梭了OSCP后的思考/&title=《一把梭了OSCP后的思考》 — 放荡不羁混世间&source=分享自己在网络安全方面的领悟，目前处于web安全以及靶机阶段" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+        </div>
+        
+            
+    <div id="comment"></div>
+
+
+
+        
+    </div>
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="next">
+      <a href="/2019/07/09/HTB靶机渗透实战Writeup-Carrier/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">HTB靶机渗透实战Writeup_Carrier</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+    
+    
+        <aside class="post-widget">
+            <nav class="post-toc-wrap" id="post-toc">
+                <strong>目录</strong>
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#个人历程"><span class="post-toc-number">1.</span> <span class="post-toc-text">个人历程</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#时间线"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">时间线</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#建议一-可选任务"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">建议一 可选任务</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#建议二-思维转换"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">建议二 思维转换</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#建议三-时间安排"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">建议三 时间安排</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#建议三-详细记录"><span class="post-toc-number">1.5.</span> <span class="post-toc-text">建议三 详细记录</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#建议四-多理解官方考试指南"><span class="post-toc-number">1.6.</span> <span class="post-toc-text">建议四 多理解官方考试指南</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#坑点"><span class="post-toc-number">2.</span> <span class="post-toc-text">坑点</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#坑点一-不要使用以下软件版本"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">坑点一 不要使用以下软件版本</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#坑点二-注意msf的攻击限制"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">坑点二 注意msf的攻击限制</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#坑点三-只能在一台机器上使用一次meterpreter"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">坑点三 只能在一台机器上使用一次meterpreter</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#坑点四-一定要交互式shell-不要webshell"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">坑点四 一定要交互式shell 不要webshell</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#坑点五-获取最高权限后登陆ssh或3389远程桌面"><span class="post-toc-number">2.5.</span> <span class="post-toc-text">坑点五 获取最高权限后登陆ssh或3389远程桌面</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#坑点六-Try-Harder"><span class="post-toc-number">2.6.</span> <span class="post-toc-text">坑点六 Try Harder!</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#槽点"><span class="post-toc-number">3.</span> <span class="post-toc-text">槽点</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#关于交流"><span class="post-toc-number">4.</span> <span class="post-toc-text">关于交流</span></a></li></ol>
+            </nav>
+            <div class="toc-bar"><div>
+        </aside>
+    
+</article>
+
+    <div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们一起来让这个世界有趣一点
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/reward-wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/reward-wechat.jpg" data-alipay="/img/reward-alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+    
+
+</div>
+
+    </main>
+    <footer class="footer ">
+    
+    <div class="top">
+        
+            <p>
+    <span>Links：</span>
+    
+    <span class="blogroll-item">
+        <a href="https://www.b1ngda0.cn" target="_blank">HOME</a>
+    </span>
+    
+</p>
+
+        
+    </div>
+    
+    <div class="bottom">
+        <p>
+            <span>
+                B1ngDa0 &copy; 2019
+            </span>
+        		
+           	
+            
+            
+            
+            
+
+            
+                
+<span class="site-uv" title="总访客量">
+    <i class="icon icon-user"></i>
+    <i class="busuanzi-value" id="busuanzi_value_site_uv"></i>
+</span>
+
+
+<span class="site-pv" title="总访问量">
+    <i class="icon icon-eye"></i>
+    <i class="busuanzi-value" id="busuanzi_value_site_pv"></i>
+</span>
+
+            
+        </p>
+    </div>
+</footer>
+
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://www.b1ngda0.cn/2019/07/10/一把梭了OSCP后的思考/&title=《一把梭了OSCP后的思考》 — 放荡不羁混世间&pic=https://www.b1ngda0.cn/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://www.b1ngda0.cn/2019/07/10/一把梭了OSCP后的思考/&title=《一把梭了OSCP后的思考》 — 放荡不羁混世间&source=分享自己在网络安全方面的领悟，目前处于web安全以及靶机阶段" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACw0lEQVR42u3aW2rrQBAFwOx/0wncr0Dw6PRjbC6UvoLjSFMKqFt95usrPr7/Heeff3/y9/Pzd87nSc45OvDw8PBaSz+f7vzJq8UlpK2rv7wFeHh4eNd4STE4P9CT8+TP8Lw4PVwLDw8P76O8MztvhXstMh4eHt7/y+u143mR+HBhwMPDw4t51SUm4AkpH0+szVrw8PDwYt5WAPbOnz+Q7+Hh4eHFEVQ14qo+7s/F5ntw4OHh4d3g5eHWViuctN2TlURvDHh4eHirvOpQtbdlaisqi4oWHh4e3iqv2i7nA9P5zaoWjIc3Bjw8PLxV3nlcW916VR0WTMKth7Xh4eHhXeDlL/9545sMEXq3qVmo8PDw8K7x8o2h1Yd+dTibNOuFNePh4eFd4OWk3uXnUVb1DIVdY3h4eHhj3sNgtBhKzeOxaof8UBjw8PDwVnl525rfgt7Z8qHDWpHAw8PDi3m9EWqvAIwe5b1wDg8PD+8CL//j3rJ6A4Wk+c5LFB4eHt57eL3IavLbrVY+Kgx4eHh4S7xenF9tyvNPeiWkvAELDw8Pr8hLtgjsRlm9oKs56sXDw8O7xstDrGpUlrfFo0b51Xfw8PDwLvDyB3TSlUc9e7FgzIMxPDw8vF3evC2ejB7ypUf/n7+rxcPDw7vAS45Jc1yNx/JBQy9sw8PDw5vzqgPZ/MK9+H8yJo7GuHh4eHirvHx6kVx+suh8rHz+Dh4eHt4NXv4Cn8djvQitOUqIh8J4eHh4W7zJozzfAjXZgDUpSHh4eHg3eJPHbjUkqz70q6WoV07w8PDwerzqyGAyOMivnheGwn3Cw8PDW+WVpxfxJfPgalJIylMWPDw8vLfw8lFCbxtBtR0vpHx4eHh4H+VVxxCTiKu80QoPDw/vjbzq1qh5Sz0PuqIgDQ8PD+8Cbz4LzYP8fHF5EVrO9/Dw8PBO3/wBQu1BBah/JCsAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+    
+    <!-- main-js -->
+<script type="text/javascript" src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js"></script>
+<script type="text/javascript" src="/js/plugins/fastclick.js?v=1.4.2"></script>
+<script type="text/javascript" src="/js/plugins/ios-orientationchange-fix.js?v=1.4.2"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.js"></script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+
+<script type="text/javascript" src="/js/method.js?v=1.4.2"></script>
+<script type="text/javascript" src="/js/blog.js?v=1.4.2"></script>
+
+<!-- third-party -->
+
+
+
+
+
+
+<script type="text/javascript" src="/js/plugins/local_search.js?v=1.4.2"></script>
+<script type="text/javascript">
+	var search_path = "search.xml";
+	if (search_path.length === 0) {
+		search_path = "search.xml";
+	}
+	var path = "/" + search_path;
+	searchFunc(path, "local-search-input", "local-search-result");
+</script>
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+    
+        <script type="text/javascript" src="https://cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script type="text/javascript" src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script type="text/javascript" src="/js/plugins/valine.js?v=1.4.2"></script>
+    
+    
+
+
+
+<script type="text/javascript" src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+<script type="text/javascript" src="/js/plugins/leancloud_visitors.js?v=1.4.2"></script>
+
+
+
+    <!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+            processEscapes: true,
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+
+
+
+    
+</body>
+</html>

